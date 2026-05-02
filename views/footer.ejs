@@ -1,0 +1,185 @@
+<%
+    /* ── Footer dynamic colors ─────────────────────────────────────── */
+    const _fc = (negocio && negocio.colores) ? negocio.colores : {};
+    const _footerBg        = _fc.footerBg        || '#2d3748';
+    const _footerText      = _fc.footerText      || '#cbd5e0';
+    const _footerHeading   = _fc.footerHeading   || '#ffffff';
+    const _footerLink      = _fc.footerLink      || '#cbd5e0';
+    const _footerLinkHover = _fc.footerLinkHover || '#ffffff';
+    const _footerHr        = _fc.footerHr        || 'rgba(255,255,255,0.12)';
+    const _footerIconMode  = _fc.footerIconMode  || 'brand'; /* 'brand' | 'custom' */
+    const _footerIconBg1   = _fc.footerIconBg1   || '#667eea';
+    const _footerIconBg2   = _fc.footerIconBg2   || '#764ba2';
+
+    /* Brand colors for each network */
+    const BRAND_COLORS = {
+        facebook:  '#1877F2',
+        instagram: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)',
+        whatsapp:  '#25D366',
+        twitter:   '#1DA1F2',
+        youtube:   '#FF0000',
+        linkedin:  '#0A66C2',
+        tiktok:    '#010101'
+    };
+
+    function socialBg(net) {
+        if (_footerIconMode === 'brand') return BRAND_COLORS[net] || '#667eea';
+        return 'linear-gradient(135deg,' + _footerIconBg1 + ' 0%,' + _footerIconBg2 + ' 100%)';
+    }
+%>
+
+<footer class="dyn-footer">
+    <div class="container">
+        <div class="row">
+            <!-- Sobre la tienda -->
+            <div class="col-md-4 mb-4 mb-md-0">
+                <% if (negocio.logoFooter && negocio.logoFooter.image && negocio.logoFooter.type !== 'text') { %>
+                    <div class="mb-3">
+                        <img src="<%= negocio.logoFooter.image %>" alt="<%= negocio.nombre %>" style="width: <%= negocio.logoFooter?.size || 120 %>px; max-width: 100%; height: auto; object-fit: contain;">
+                    </div>
+                <% } else { %>
+                    <h5><%= (negocio.logoFooter && negocio.logoFooter.text) ? negocio.logoFooter.text : negocio.nombre %></h5>
+                <% } %>
+                <p><%= negocio.descripcion || 'Tu tienda online de confianza' %></p>
+                
+                <!-- Redes Sociales -->
+                <% const rs = negocio.redesSociales || {}; %>
+                <% if (rs.facebook || rs.instagram || rs.whatsapp || rs.twitter || rs.youtube || rs.linkedin || rs.tiktok) { %>
+                    <div class="social-links mt-3">
+                        <% if (rs.facebook) { %>
+                            <a href="<%= rs.facebook %>" target="_blank" class="social-icon" title="Facebook" style="background:<%- socialBg('facebook') %>;">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        <% } %>
+                        <% if (rs.instagram) { %>
+                            <a href="<%= rs.instagram %>" target="_blank" class="social-icon" title="Instagram" style="background:<%- socialBg('instagram') %>;">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        <% } %>
+                        <% if (rs.whatsapp) { %>
+                            <a href="https://wa.me/<%= rs.whatsapp %>" target="_blank" class="social-icon" title="WhatsApp" style="background:<%- socialBg('whatsapp') %>;">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        <% } %>
+                        <% if (rs.twitter) { %>
+                            <a href="<%= rs.twitter %>" target="_blank" class="social-icon" title="Twitter / X" style="background:<%- socialBg('twitter') %>;">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        <% } %>
+                        <% if (rs.youtube) { %>
+                            <a href="<%= rs.youtube %>" target="_blank" class="social-icon" title="YouTube" style="background:<%- socialBg('youtube') %>;">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        <% } %>
+                        <% if (rs.linkedin) { %>
+                            <a href="<%= rs.linkedin %>" target="_blank" class="social-icon" title="LinkedIn" style="background:<%- socialBg('linkedin') %>;">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        <% } %>
+                        <% if (rs.tiktok) { %>
+                            <a href="<%= rs.tiktok %>" target="_blank" class="social-icon social-icon--tiktok" title="TikTok" style="background:<%- socialBg('tiktok') %>;">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+            
+            <!-- Enlaces rápidos -->
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5><i class="fas fa-link"></i> Enlaces Rápidos</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="/productos"><i class="fas fa-shopping-bag"></i> Productos</a></li>
+                    <li><a href="/carrito"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
+                    <% if (user) { %>
+                        <li><a href="/mis-pedidos"><i class="fas fa-truck"></i> Mis Pedidos</a></li>
+                        <li><a href="/perfil"><i class="fas fa-user-circle"></i> Mi Perfil</a></li>
+                    <% } else { %>
+                        <li><a href="/login"><i class="fas fa-key"></i> Iniciar Sesión</a></li>
+                    <% } %>
+                </ul>
+            </div>
+            
+            <!-- Contacto -->
+            <div class="col-md-4">
+                <h5><i class="fas fa-phone-alt"></i> Contacto</h5>
+                <p>
+                    <i class="fas fa-envelope"></i> <strong><%= negocio.email || 'info@tienda.com' %></strong><br>
+                    <small><a href="mailto:<%= negocio.email || 'info@tienda.com' %>" style="color: inherit;">Enviar email</a></small>
+                </p>
+                <p>
+                    <i class="fas fa-phone"></i> <strong><%= negocio.telefono || '123456789' %></strong><br>
+                    <small><a href="tel:<%= negocio.telefono || '123456789' %>" style="color: inherit;">Llamar ahora</a></small>
+                </p>
+                <p>
+                    <i class="fas fa-map-marker-alt"></i> <strong><%= negocio.direccion || 'Dirección no especificada' %></strong>
+                </p>
+            </div>
+        </div>
+        
+        <hr class="footer-hr my-4">
+        
+        <!-- Copyright -->
+        <div class="row">
+            <div class="col-md-6">
+                <p class="mb-0 small">&copy; <%= new Date().getFullYear() %> <%= negocio.nombre %>. Todos los derechos reservados.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="mb-0 small">
+                    <a href="#" class="footer-muted-link">Política de Privacidad</a> | 
+                    <a href="#" class="footer-muted-link">Términos de Servicio</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .dyn-footer {
+        background: <%- _footerBg %>;
+        color: <%= _footerText %>;
+        padding: 40px 0 20px;
+        margin-top: 60px;
+    }
+    .dyn-footer h5 {
+        color: <%= _footerHeading %>;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .dyn-footer p { color: <%= _footerText %>; line-height: 1.8; }
+    .dyn-footer a { color: <%= _footerLink %>; text-decoration: none; transition: all 0.3s ease; }
+    .dyn-footer a:hover { color: <%= _footerLinkHover %>; }
+    .dyn-footer ul li { margin-bottom: 8px; }
+    .dyn-footer ul li i { margin-right: 8px; width: 16px; color: <%= _footerIconBg1 %>; }
+    .footer-hr { border-color: <%- _footerHr %>; opacity: 1; }
+    .footer-muted-link { color: <%= _footerText %> !important; opacity: 0.7; text-decoration: none; }
+    .footer-muted-link:hover { opacity: 1; color: <%= _footerLinkHover %> !important; }
+    .social-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .social-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        color: white !important;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        font-size: 17px;
+        flex-shrink: 0;
+    }
+    .social-icon:hover {
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        color: white !important;
+    }
+    .social-icon--tiktok { border: 1px solid rgba(255,255,255,0.15); }
+    @media (max-width: 768px) {
+        .dyn-footer { padding: 30px 0 15px; margin-top: 40px; }
+        .dyn-footer h5 { margin-bottom: 15px; }
+        .social-links { justify-content: center; }
+    }
+</style>

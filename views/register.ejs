@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= negocio && negocio.titulos_paginas && negocio.titulos_paginas.registro ? negocio.titulos_paginas.registro : 'Registro - Mi Tienda' %></title>
+    <% if (negocio && negocio.icono_pagina && negocio.icono_pagina.imagen) { %>
+        <link rel="icon" href="<%= negocio.icono_pagina.imagen %>" type="image/x-icon">
+        <link rel="apple-touch-icon" href="<%= negocio.icono_pagina.imagen %>">
+    <% } %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .register-container {
+            max-width: 550px;
+            margin: 50px auto;
+        }
+        .card {
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: none;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            border-radius: 20px 20px 0 0 !important;
+            padding: 30px;
+        }
+        .card-header h3 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .card-body {
+            padding: 40px;
+        }
+        .btn-register {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .input-group-text {
+            background: #f8f9fa;
+            border-radius: 10px 0 0 10px;
+        }
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .links a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        .password-strength {
+            margin-top: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="register-container">
+            <div class="card">
+                <div class="card-header">
+                    <h3>📝 Crear Cuenta</h3>
+                    <p class="mb-0 mt-2">Únete a nuestra comunidad</p>
+                </div>
+                <div class="card-body">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle"></i> <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <% } %>
+                    
+                    <form action="/register" method="POST" onsubmit="return validateForm()">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre completo *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">👤</span>
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Juan Pérez" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo electrónico *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">📧</span>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="tu@email.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">🔒</span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Mínimo 6 caracteres" required>
+                            </div>
+                            <div class="password-strength text-muted" id="passwordStrength"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirmar contraseña *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">✅</span>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Repite tu contraseña" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <div class="input-group">
+                                <span class="input-group-text">📱</span>
+                                <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+54 11 1234-5678">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <div class="input-group">
+                                <span class="input-group-text">📍</span>
+                                <textarea class="form-control" id="direccion" name="direccion" rows="2" placeholder="Calle, número, ciudad, código postal"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                Acepto los <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">términos y condiciones</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-register w-100">
+                            Registrarse
+                        </button>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center links">
+                        <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de términos y condiciones -->
+    <div class="modal fade" id="termsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Términos y Condiciones</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Al registrarte aceptas nuestros términos de uso y políticas de privacidad.</p>
+                    <p>Tu información será utilizada únicamente para procesar tus pedidos.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Validación del formulario
+        function validateForm() {
+            var password = document.getElementById("password").value;
+            var confirm = document.getElementById("confirm_password").value;
+            
+            if (password !== confirm) {
+                alert("Las contraseñas no coinciden");
+                return false;
+            }
+            
+            if (password.length < 6) {
+                alert("La contraseña debe tener al menos 6 caracteres");
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Medidor de fuerza de contraseña
+        document.getElementById("password").addEventListener("input", function() {
+            var password = this.value;
+            var strength = document.getElementById("passwordStrength");
+            
+            if (password.length === 0) {
+                strength.innerHTML = "";
+            } else if (password.length < 6) {
+                strength.innerHTML = "🔴 Débil - Mínimo 6 caracteres";
+                strength.style.color = "red";
+            } else if (password.length < 8) {
+                strength.innerHTML = "🟡 Media - Añade más caracteres";
+                strength.style.color = "orange";
+            } else {
+                strength.innerHTML = "🟢 Fuerte";
+                strength.style.color = "green";
+            }
+        });
+    </script>
+</body>
+</html>

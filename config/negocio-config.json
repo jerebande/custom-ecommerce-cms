@@ -1,0 +1,190 @@
+{
+  "productos": {
+    "titulo_seccion": "Nuestros Productos",
+    "subtitulo_seccion": "Descubre nuestra selección de productos de alta calidad",
+    "boton_agregar": "Agregar",
+    "mensaje_sin_stock": "Sin stock",
+    "mensaje_sin_productos": "No hay productos disponibles",
+    "card_descripcion_limit": 80
+  },
+  "titulos_paginas": {
+    "indice": "Tienda",
+    "carrito": "vfffffffffffnfvnnfv",
+    "login": "Iniciar Sesión tienda",
+    "registro": "Registro",
+    "productos": "efnfenefne",
+    "producto_detalle": "vfmvvffvnfn",
+    "pedido_confirmado": "Pedido Confirmado",
+    "recuperar": "Recuperar Contraseña",
+    "mis_pedidos": "vfmfvmfvmfv"
+  },
+  "icono_pagina": {
+    "imagen": "/uploads/logos/1777586335401-760714907.webp",
+    "tipo": "image"
+  },
+  "carrito": {
+    "titulo_seccion": "Mi Carrito",
+    "subtitulo_seccion": "Revisa tus productos antes de finalizar la compra",
+    "mensaje_vacio": "Tu carrito está vacío",
+    "mensaje_vacio_desc": "¡Explora nuestros productos y encuentra lo que te gusta!",
+    "boton_vaciar": "Vaciar Carrito",
+    "boton_ver_productos": "Ver Productos",
+    "boton_comprar": "Proceder al pago",
+    "resumen_titulo": "Resumen del Pedido",
+    "subtotal_label": "Subtotal:",
+    "envio_label": "Envío:",
+    "envio_texto": "Gratis",
+    "total_label": "Total:"
+  },
+  "mis_pedidos": {
+    "titulo_seccion": "Mis Pedidos",
+    "subtitulo_seccion": "Consulta el historial y estado de tus compras",
+    "mensaje_vacio": "Sin pedidos aún",
+    "mensaje_vacio_desc": "No tienes pedidos registrados. ¡Comienza a explorar nuestros productos!",
+    "estado_entregado": "Entregado",
+    "estado_preparacion": "En Preparación",
+    "estado_pendiente": "Pendiente",
+    "info_direccion": "Dirección de Entrega",
+    "info_pago": "Método de Pago",
+    "productos_titulo": "Productos del Pedido",
+    "total_label": "Total del Pedido:"
+  },
+  "colores": {
+    "primary": "#667eea",
+    "secondary": "#764ba2",
+    "bodyBg": "#f5f7fb",
+    "textColor": "#2d3748",
+    "navbarBg": "#ffffff",
+    "logoTextColor": "#667eea",
+    "navLinkColor": "#2d3748",
+    "navLinkHover": "#ffffff",
+    "btnBg1": "#667eea",
+    "btnBg2": "#764ba2",
+    "btnBg3": "#4f46e5",
+    "btnTextColor": "#ffffff",
+    "iconColor": "#667eea",
+    "iconColor2": "#764ba2",
+    "sectionColor1": "#667eea",
+    "sectionColor2": "#764ba2",
+    "sectionColor3": "#4f46e5",
+    "textColor1": "#2d3748",
+    "textColor2": "#667eea",
+    "textColor3": "#764ba2",
+    "categoryBg": "#f7fafc",
+    "categoryBorder": "#e2e8f0",
+    "categoryText": "#2d3748",
+    "categorySelected1": "#667eea",
+    "categorySelected2": "#764ba2",
+    "categorySelected3": "#4f46e5",
+    "navbarUsesGradient": "false",
+    "sectionColorMode": "2",
+    "textColorMode": "1",
+    "btnColorMode": "2",
+    "categoryColorMode": "2",
+    "panelColor1": "#ffffff",
+    "panelColor2": "#f8fafc",
+    "panelColor3": "#eef2ff",
+    "panelBorder": "#e2e8f0",
+    "panelColorMode": "1",
+    "footerBg": "#2d3748",
+    "footerText": "#cbd5e0",
+    "footerHeading": "#ffffff",
+    "footerLink": "#cbd5e0",
+    "footerLinkHover": "#ffffff",
+    "footerIconBg1": "#667eea",
+    "footerIconBg2": "#764ba2",
+    "footerIconMode": "brand",
+    "bannerTitleColor": "#ffffff",
+    "bannerSubtitleColor": "#ffffff"
+  },
+  "nombre": "Tienda Elegante",
+  "email": "jeremiasbandelli4@gmail.com",
+  "telefono": "+542346533182",
+  "direccion": "General Frías 112",
+  "descripcion": "",
+  "whatsappAdmin": "5492346533182",
+  "logoHeader": {
+    "type": "text",
+    "text": "Tienda",
+    "image": "/uploads/logos/1777007082451-12405996.webp",
+    "size": 78
+  },
+  "logoFooter": {
+    "type": "text",
+    "text": "Tienda ",
+    "image": "/uploads/logos/1777007174570-495874939.webp",
+    "size": 120
+  },
+  "redesSociales": {
+    "facebook": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA",
+    "instagram": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA",
+    "whatsapp": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA",
+    "twitter": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA",
+    "youtube": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA",
+    "linkedin": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA",
+    "tiktok": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA"
+  },
+  "pedidosConfig": {
+    "modoOperacion": "retiro",
+    "direccionLocal": "no se",
+    "horarioLocal": "2 a 6",
+    "indicacionesLocal": "nose",
+    "tarifas": {
+      "envio": {
+        "activo": true,
+        "tipo": "porcentaje",
+        "valor": 10,
+        "gratisDesde": 0,
+        "label": "Costo de envío"
+      },
+      "impuesto": {
+        "activo": true,
+        "porcentaje": 20,
+        "label": "IVA",
+        "incluido": false
+      },
+      "extra": {
+        "activo": true,
+        "nombre": "costo adicional",
+        "tipo": "fijo",
+        "valor": 2000
+      }
+    }
+  },
+  "home": {
+    "hero": {
+      "titulo": "Bienvenido a Tienda Elegante",
+      "descripcion": "Descubre productos de alta calidad con los mejores precios",
+      "boton_texto": "Explorar Productos",
+      "boton_url": "/productos"
+    },
+    "features": [
+      {
+        "icono": "fas fa-rocket",
+        "titulo": "Envío Rápido",
+        "descripcion": "Entregas en tiempo récord"
+      },
+      {
+        "icono": "fas fa-shield-alt",
+        "titulo": "Pago Seguro",
+        "descripcion": "Múltiples métodos de pago"
+      },
+      {
+        "icono": "fas fa-gem",
+        "titulo": "Nueva Característica",
+        "descripcion": "Descripción de la característica"
+      }
+    ],
+    "titulos_paginas": {
+      "indice": "Tienda",
+      "carrito": "vfffffffffffnfvnnfv",
+      "login": "Iniciar Sesión tienda",
+      "registro": "Registro",
+      "productos": "efnfenefne",
+      "producto_detalle": "vfmvvffvnfn",
+      "pedido_confirmado": "Pedido Confirmado",
+      "recuperar": "Recuperar Contraseña",
+      "mis_pedidos": "vfmfvmfvmfv"
+    }
+  }
+}

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Configurar Página de Inicio - Admin</title>
+    <% if (negocio && negocio.icono_pagina && negocio.icono_pagina.imagen) { %>
+        <link rel="icon" href="<%= negocio.icono_pagina.imagen %>" type="image/x-icon">
+        <link rel="apple-touch-icon" href="<%= negocio.icono_pagina.imagen %>">
+    <% } %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --primary-light: #7f9cf5;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fb 0%, #f0f2f8 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            background: var(--white);
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            width: 280px;
+            z-index: 500;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            border-right: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: var(--light); }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .sidebar-header {
+            padding: 30px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            background: var(--gradient);
+            position: relative;
+            overflow: hidden;
+        }
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        .sidebar-header h4 { font-weight: 800; margin-bottom: 8px; color: var(--white); position: relative; z-index: 1; font-size: 1.5rem; }
+        .sidebar-header h4 i { margin-right: 8px; }
+        .sidebar-header small { opacity: 0.9; color: rgba(255,255,255,0.9); position: relative; z-index: 1; font-size: 0.85rem; }
+
+        .nav-menu { padding: 20px 16px; }
+        .nav-section { margin-bottom: 24px; }
+        .nav-section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--gray-light); padding: 0 16px; margin-bottom: 12px; }
+
+        .nav-link-custom {
+            color: var(--gray);
+            text-decoration: none;
+            padding: 12px 16px;
+            display: flex; align-items: center; gap: 12px;
+            transition: var(--transition);
+            border-radius: var(--radius);
+            margin-bottom: 4px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-custom::before {
+            content: '';
+            position: absolute; left: 0; top: 0;
+            width: 0; height: 100%;
+            background: var(--gradient);
+            transition: var(--transition);
+            z-index: -1; opacity: 0;
+        }
+        .nav-link-custom:hover::before { width: 100%; opacity: 0.1; }
+        .nav-link-custom i { width: 24px; font-size: 1.2rem; }
+        .nav-link-custom:hover { color: var(--primary); transform: translateX(4px); }
+        .nav-link-custom.active { background: var(--gradient); color: var(--white); box-shadow: var(--shadow-md); }
+        .nav-link-custom.active i { color: var(--white); }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 280px;
+            padding: 32px 40px;
+            min-height: 100vh;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .page-header-left { display: flex; align-items: center; gap: 18px; }
+        .page-header-icon {
+            width: 56px; height: 56px;
+            background: var(--gradient);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: white;
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+        }
+        .page-header-text h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .page-header-text p { color: var(--gray); margin: 0; font-size: 0.9rem; }
+
+        .user-badge {
+            display: flex; align-items: center; gap: 10px;
+            background: var(--light);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+        .user-badge i { font-size: 1.4rem; color: var(--primary); }
+        .user-badge span { font-weight: 600; color: var(--dark); font-size: 0.9rem; }
+
+        /* ===== SECTION LABEL ===== */
+        .section-label {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            color: var(--gray-light);
+            margin-bottom: 16px;
+            margin-top: 8px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(0,0,0,0.07);
+        }
+
+        /* ===== CONFIG CARDS ===== */
+        .config-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .config-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-1px); }
+
+        .config-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .config-card-title {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .config-card-title-icon {
+            width: 38px; height: 38px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        .card-divider {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 0 0 24px 0;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .form-label { font-weight: 600; color: var(--dark); margin-bottom: 8px; font-size: 0.875rem; }
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius);
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+            outline: none;
+        }
+
+        /* ===== FEATURE ITEMS ===== */
+        .feature-item {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .feature-item:hover { box-shadow: var(--shadow-md); }
+
+        .remove-feature {
+            position: absolute; top: 14px; right: 14px;
+            background: var(--danger);
+            color: white; border: none;
+            border-radius: 50%;
+            width: 30px; height: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem;
+        }
+        .remove-feature:hover { transform: scale(1.15); background: #dc2626; }
+
+        .icon-preview {
+            width: 46px; height: 46px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: white;
+            flex-shrink: 0;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-primary-custom {
+            background: var(--gradient);
+            color: var(--white);
+            border: none;
+            padding: 13px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
+            letter-spacing: 0.3px;
+        }
+        .btn-primary-custom:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .btn-primary-custom:active { transform: translateY(0); }
+
+        .btn-success-custom {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white; border: none;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 600; font-size: 0.875rem;
+            transition: var(--transition);
+            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 7px;
+        }
+        .btn-success-custom:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+        /* ===== SAVE BAR ===== */
+        .save-bar {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            margin-top: 8px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .save-bar-hint { color: var(--gray); font-size: 0.875rem; }
+
+        /* ===== ALERT ===== */
+        .alert { border-radius: var(--radius); border: none; }
+
+        /* ===== SAVE BAR RESPONSIVE ===== */
+        @media (max-width: 576px) {
+            .save-bar { flex-direction: column; text-align: center; padding: 20px; gap: 12px; }
+            .btn-primary-custom { width: 100%; justify-content: center; }
+            .save-bar-hint { font-size: 0.8rem; }
+        }
+
+        /* ===== MOBILE ===== */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed; top: 15px; right: 15px;
+            z-index: 700;
+            background: var(--gradient);
+            border: none;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-xl);
+            cursor: pointer;
+            align-items: center; justify-content: center;
+        }
+        .overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 600;
+        }
+        .overlay.active { display: block; }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); position: fixed; z-index: 650; width: 280px; }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 16px; padding-top: 76px; }
+            .mobile-menu-btn { display: flex; }
+            .page-header { padding: 20px; flex-direction: column; align-items: flex-start; }
+            .page-header-text h1 { font-size: 1.25rem; }
+            .user-badge { align-self: flex-start; }
+            .config-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-chart-line"></i> Panel Admin</h4>
+            <small><%= user ? user.nombre : 'Administrador' %></small>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Principal</div>
+                <a href="/admin" class="nav-link-custom"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="/admin#productos" class="nav-link-custom"><i class="fas fa-box"></i> Productos</a>
+                <a href="/admin#pedidos" class="nav-link-custom"><i class="fas fa-shopping-cart"></i> Pedidos</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Gestión</div>
+                <a href="/admin#usuarios" class="nav-link-custom"><i class="fas fa-users"></i> Usuarios</a>
+                <a href="/admin#ventas" class="nav-link-custom"><i class="fas fa-chart-line"></i> Ventas</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Configuración</div>
+                <a href="/admin/home-config" class="nav-link-custom active"><i class="fas fa-home"></i> Configurar Home</a>
+                <a href="/admin/textos-config" class="nav-link-custom"><i class="fas fa-edit"></i> Editar Textos</a>
+                <a href="/admin#colores" class="nav-link-custom"><i class="fas fa-palette"></i> Colores del Sitio</a>
+                <a href="/admin#pedidos-config" class="nav-link-custom"><i class="fas fa-cog"></i> Config. Pedidos</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Sistema</div>
+                <a href="/" class="nav-link-custom"><i class="fas fa-store"></i> Ver tienda</a>
+                <a href="/logout" class="nav-link-custom"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <div class="page-header-text" style="display: flex; align-items: center; gap: 18px;">
+                    <% if (negocio && negocio.icono_pagina && negocio.icono_pagina.imagen) { %>
+                        <div style="width: 56px; height: 56px; flex-shrink: 0; background: #eef2ff; border-radius: 16px; display: flex; align-items: center; justify-content: center; padding: 4px;">
+                            <img src="<%= negocio.icono_pagina.imagen %>" alt="Icono" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                    <% } %>
+                    <div>
+                        <h1>Configurar Página de Inicio</h1>
+                        <p>Personaliza el contenido de la página principal de tu tienda</p>
+                    </div>
+                </div>
+            </div>
+            <div class="user-badge">
+                <i class="fas fa-user-circle"></i>
+                <span><%= user ? user.nombre : 'Administrador' %></span>
+            </div>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- HERO SECTION -->
+        <div class="section-label"><i class="fas fa-star" style="color:var(--primary)"></i> Sección Principal</div>
+        <div class="config-card">
+            <div class="config-card-header">
+                <div class="config-card-title">
+                    <div class="config-card-title-icon"><i class="fas fa-star"></i></div>
+                    Sección Hero (Banner Principal)
+                </div>
+            </div>
+            <hr class="card-divider">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label">Título Principal</label>
+                    <input type="text" class="form-control" id="heroTitulo" placeholder="Ej: Bienvenido a Tienda Elegante">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-control" id="heroDescripcion" rows="2" placeholder="Descripción breve del sitio que verán los visitantes"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Texto del Botón</label>
+                    <input type="text" class="form-control" id="heroBotonTexto" placeholder="Ej: Explorar Productos">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">URL del Botón</label>
+                    <input type="text" class="form-control" id="heroBotonUrl" placeholder="Ej: /productos">
+                </div>
+            </div>
+        </div>
+
+        <!-- TÍTULOS DE PÁGINA Y ICONO -->
+        <div class="section-label"><i class="fas fa-window-maximize" style="color:var(--primary)"></i> Títulos de Página e Icono</div>
+        <div class="config-card">
+            <div class="config-card-header">
+                <div class="config-card-title">
+                    <div class="config-card-title-icon"><i class="fas fa-window-maximize"></i></div>
+                    Configurar Títulos de Páginas
+                </div>
+            </div>
+            <hr class="card-divider">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-home" style="color:var(--primary); margin-right:6px;"></i>Inicio (index.ejs)</label>
+                    <input type="text" class="form-control" id="titulo_indice" placeholder="Ej: Tienda Elegante">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-shopping-cart" style="color:var(--primary); margin-right:6px;"></i>Carrito</label>
+                    <input type="text" class="form-control" id="titulo_carrito" placeholder="Ej: Mi Carrito - Tienda">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-sign-in-alt" style="color:var(--primary); margin-right:6px;"></i>Iniciar Sesión</label>
+                    <input type="text" class="form-control" id="titulo_login" placeholder="Ej: Iniciar Sesión">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-user-plus" style="color:var(--primary); margin-right:6px;"></i>Registro</label>
+                    <input type="text" class="form-control" id="titulo_registro" placeholder="Ej: Crear Cuenta">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-box" style="color:var(--primary); margin-right:6px;"></i>Detalle Producto</label>
+                    <input type="text" class="form-control" id="titulo_producto_detalle" placeholder="Ej: Detalle del Producto">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-check-circle" style="color:var(--primary); margin-right:6px;"></i>Pedido Confirmado</label>
+                    <input type="text" class="form-control" id="titulo_pedido_confirmado" placeholder="Ej: Pedido Confirmado">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-redo" style="color:var(--primary); margin-right:6px;"></i>Recuperar Contraseña</label>
+                    <input type="text" class="form-control" id="titulo_recuperar" placeholder="Ej: Recuperar Contraseña">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-list" style="color:var(--primary); margin-right:6px;"></i>Mis Pedidos</label>
+                    <input type="text" class="form-control" id="titulo_mis_pedidos" placeholder="Ej: Mis Pedidos">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-shopping-bag" style="color:var(--primary); margin-right:6px;"></i>Productos</label>
+                    <input type="text" class="form-control" id="titulo_productos" placeholder="Ej: Nuestros Productos">
+                </div>
+            </div>
+            <hr class="card-divider" style="margin-top: 24px;">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label"><i class="fas fa-image" style="color:var(--primary); margin-right:6px;"></i>Icono de Página (Favicon)</label>
+                    <div class="d-flex gap-3 align-items-end">
+                        <div>
+                            <div id="iconoPreview" style="width: 80px; height: 80px; background: var(--light); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; border: 2px dashed #e2e8f0; overflow: hidden;">
+                                <img id="iconoImg" src="" alt="Icono" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                        <div style="flex: 1;">
+                            <input type="file" id="iconoUpload" class="form-control" accept="image/*" onchange="previewIcono(event)">
+                            <small class="text-muted d-block mt-2">Formatos: PNG, JPG, ICO (recomendado: 192x192px o más)</small>
+                            <button type="button" class="btn btn-sm btn-outline-danger mt-2" id="btnEliminarIcono" style="display:none;" onclick="eliminarIcono()">
+                                <i class="fas fa-trash"></i> Eliminar Icono
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURES SECTION -->
+        <div class="section-label"><i class="fas fa-th-large" style="color:var(--primary)"></i> Características</div>
+        <div class="config-card">
+            <div class="config-card-header">
+                <div class="config-card-title">
+                    <div class="config-card-title-icon"><i class="fas fa-th-large"></i></div>
+                    Cuadros de Características
+                </div>
+                <button class="btn-success-custom" onclick="addFeature()">
+                    <i class="fas fa-plus"></i> Agregar Característica
+                </button>
+            </div>
+            <hr class="card-divider">
+            <div id="featuresContainer"></div>
+        </div>
+
+        <!-- SAVE BAR -->
+        <div class="save-bar">
+            <span class="save-bar-hint"><i class="fas fa-info-circle me-1"></i> Los cambios se aplicarán en la tienda al guardar</span>
+            <button class="btn-primary-custom" onclick="saveConfig()">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+        </div>
+
+    </div><!-- end main-content -->
+
+    <script>
+        let features = [];
+
+        function loadConfig() {
+            fetch('/admin/api/home-config')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.home) {
+                        document.getElementById('heroTitulo').value = data.home.hero?.titulo || '';
+                        document.getElementById('heroDescripcion').value = data.home.hero?.descripcion || '';
+                        document.getElementById('heroBotonTexto').value = data.home.hero?.boton_texto || '';
+                        document.getElementById('heroBotonUrl').value = data.home.hero?.boton_url || '';
+                        features = data.home.features || [];
+                        renderFeatures();
+                    }
+                    
+                    // Cargar títulos de página
+                    if (data.titulos_paginas) {
+                        document.getElementById('titulo_indice').value = data.titulos_paginas.indice || 'Tienda Elegante';
+                        document.getElementById('titulo_carrito').value = data.titulos_paginas.carrito || 'Mi Carrito - Tienda Elegante';
+                        document.getElementById('titulo_login').value = data.titulos_paginas.login || 'Iniciar Sesión';
+                        document.getElementById('titulo_registro').value = data.titulos_paginas.registro || 'Registro';
+                        document.getElementById('titulo_producto_detalle').value = data.titulos_paginas.producto_detalle || 'Producto';
+                        document.getElementById('titulo_pedido_confirmado').value = data.titulos_paginas.pedido_confirmado || 'Pedido Confirmado';
+                        document.getElementById('titulo_recuperar').value = data.titulos_paginas.recuperar || 'Recuperar Contraseña';
+                        document.getElementById('titulo_mis_pedidos').value = data.titulos_paginas.mis_pedidos || 'Mis Pedidos';
+                        document.getElementById('titulo_productos').value = data.titulos_paginas.productos || 'Productos - Tienda Elegante';
+                    }
+                    
+                    // Cargar icono
+                    if (data.icono_pagina && data.icono_pagina.imagen) {
+                        document.getElementById('iconoImg').src = data.icono_pagina.imagen;
+                        document.getElementById('iconoImg').style.display = 'block';
+                        document.getElementById('btnEliminarIcono').style.display = 'inline-block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Error al cargar configuración', 'danger');
+                });
+        }
+
+        function renderFeatures() {
+            const container = document.getElementById('featuresContainer');
+            if (features.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; color: var(--gray-light);">
+                        <i class="fas fa-th-large" style="font-size:2.5rem; margin-bottom:12px; display:block; opacity:0.4;"></i>
+                        No hay características. ¡Agregá una!
+                    </div>`;
+                return;
+            }
+            container.innerHTML = features.map((feature, index) => `
+                <div class="feature-item">
+                    <button class="remove-feature" onclick="removeFeature(${index})" title="Eliminar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="row g-3 align-items-start">
+                        <div class="col-md-3">
+                            <label class="form-label">Ícono (FontAwesome)</label>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="icon-preview">
+                                    <i class="${feature.icono || 'fas fa-gem'}"></i>
+                                </div>
+                                <input type="text" class="form-control"
+                                    placeholder="Ej: fas fa-gem"
+                                    value="${feature.icono || ''}"
+                                    onchange="updateFeature(${index}, 'icono', this.value)">
+                            </div>
+                            <small class="text-muted" style="font-size:0.78rem;">Clase de FontAwesome</small>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Título</label>
+                            <input type="text" class="form-control"
+                                value="${escapeHtml(feature.titulo || '')}"
+                                placeholder="Ej: Envío Gratis"
+                                onchange="updateFeature(${index}, 'titulo', this.value)">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control"
+                                value="${escapeHtml(feature.descripcion || '')}"
+                                placeholder="Ej: En compras mayores a $5000"
+                                onchange="updateFeature(${index}, 'descripcion', this.value)">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+        }
+
+        function updateFeature(index, field, value) {
+            features[index][field] = value;
+            if (field === 'icono') {
+                const items = document.querySelectorAll('.feature-item');
+                const preview = items[index]?.querySelector('.icon-preview i');
+                if (preview) preview.className = value;
+            }
+        }
+
+        function addFeature() {
+            features.push({ icono: 'fas fa-gem', titulo: 'Nueva Característica', descripcion: 'Descripción de la característica' });
+            renderFeatures();
+        }
+
+        function removeFeature(index) {
+            if (confirm('¿Eliminar esta característica?')) {
+                features.splice(index, 1);
+                renderFeatures();
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+            alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+            const container = document.getElementById('alertContainer');
+            container.innerHTML = '';
+            container.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+
+        function saveConfig() {
+            const config = {
+                hero: {
+                    titulo: document.getElementById('heroTitulo').value,
+                    descripcion: document.getElementById('heroDescripcion').value,
+                    boton_texto: document.getElementById('heroBotonTexto').value,
+                    boton_url: document.getElementById('heroBotonUrl').value
+                },
+                features: features,
+                titulos_paginas: {
+                    indice: document.getElementById('titulo_indice').value,
+                    carrito: document.getElementById('titulo_carrito').value,
+                    login: document.getElementById('titulo_login').value,
+                    registro: document.getElementById('titulo_registro').value,
+                    productos: document.getElementById('titulo_productos').value,
+                    producto_detalle: document.getElementById('titulo_producto_detalle').value,
+                    pedido_confirmado: document.getElementById('titulo_pedido_confirmado').value,
+                    recuperar: document.getElementById('titulo_recuperar').value,
+                    mis_pedidos: document.getElementById('titulo_mis_pedidos').value
+                }
+            };
+            
+            // Si hay icono para subir
+            const iconoFile = document.getElementById('iconoUpload').files[0];
+            const formData = new FormData();
+            formData.append('config', JSON.stringify(config));
+            if (iconoFile) {
+                formData.append('icono', iconoFile);
+            }
+            
+            fetch('/admin/api/home-config', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('✓ Configuración guardada correctamente', 'success');
+                    document.getElementById('iconoUpload').value = '';
+                } else {
+                    showAlert('Error al guardar: ' + (data.error || 'Error desconocido'), 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('Error al guardar la configuración', 'danger');
+            });
+        }
+        
+        function previewIcono(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('iconoImg').src = e.target.result;
+                    document.getElementById('iconoImg').style.display = 'block';
+                    document.getElementById('btnEliminarIcono').style.display = 'inline-block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function eliminarIcono() {
+            if (confirm('¿Deseas eliminar el icono actual?')) {
+                fetch('/admin/api/delete-icono', { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('iconoImg').src = '';
+                            document.getElementById('iconoImg').style.display = 'none';
+                            document.getElementById('iconoUpload').value = '';
+                            document.getElementById('btnEliminarIcono').style.display = 'none';
+                            showAlert('✓ Icono eliminado', 'success');
+                        }
+                    });
+            }
+        }
+
+        document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        });
+        document.getElementById('overlay')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        loadConfig();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

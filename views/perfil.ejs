@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mi Perfil - Tienda Elegante</title>
+    <% if (negocio && negocio.icono_pagina && negocio.icono_pagina.imagen) { %>
+        <link rel="icon" href="<%= negocio.icono_pagina.imagen %>" type="image/x-icon">
+        <link rel="apple-touch-icon" href="<%= negocio.icono_pagina.imagen %>">
+    <% } %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <% 
+        const _c = (negocio && negocio.colores) ? negocio.colores : {};
+        const _p1             = _c.primary          || '#667eea';
+        const _p2             = _c.secondary        || '#764ba2';
+        const _bodyBg         = _c.bodyBg           || '#f5f7fb';
+        const _textColor      = _c.textColor        || '#2d3748';
+        const _navbarBg       = _c.navbarBg         || '#ffffff';
+        const _navGrad        = (_c.navbarUsesGradient === 'true');
+        const _logoColor      = _c.logoTextColor    || '#667eea';
+        const _navLinkColor   = _c.navLinkColor     || '#2d3748';
+        const _navLinkHover   = _c.navLinkHover     || '#ffffff';
+        const _btnBg1         = _c.btnBg1           || _p1;
+        const _btnBg2         = _c.btnBg2           || _p2;
+        const _btnBg3         = _c.btnBg3           || _p2;
+        const _btnMode        = _c.btnColorMode     || '2';
+        const _btnTextColor   = _c.btnTextColor     || '#ffffff';
+        const _sectionMode    = _c.sectionColorMode || '2';
+        const _sectionColor1  = _c.sectionColor1    || _p1;
+        const _sectionColor2  = _c.sectionColor2    || _p2;
+        const _sectionColor3  = _c.sectionColor3    || _p2;
+        const buildDynColor = (mode, c1, c2, c3) => {
+            if (mode === '1') return c1;
+            if (mode === '3') return `linear-gradient(135deg,${c1} 0%,${c2} 50%,${c3} 100%)`;
+            return `linear-gradient(135deg,${c1} 0%,${c2} 100%)`;
+        };
+        const _navBgFinal     = _navGrad
+            ? `linear-gradient(135deg,${_p1} 0%,${_p2} 100%)`
+            : _navbarBg;
+        const _navLinkFinal   = _navGrad ? 'rgba(255,255,255,0.92)' : _navLinkColor;
+        const _sectionBgFinal = buildDynColor(_sectionMode, _sectionColor1, _sectionColor2, _sectionColor3);
+        const _btnBgFinal     = buildDynColor(_btnMode, _btnBg1, _btnBg2, _btnBg3);
+    %>
+    <style>
+        :root {
+            --dyn-body-bg:       <%= _bodyBg %>;
+            --dyn-text:          <%= _textColor %>;
+            --dyn-navbar-bg:     <%= _navBgFinal %>;
+            --dyn-nav-link:      <%= _navLinkFinal %>;
+            --dyn-nav-hover-bg:  linear-gradient(135deg, <%= _p1 %> 0%, <%= _p2 %> 100%);
+            --dyn-nav-hover-text:<%= _navLinkHover %>;
+            --dyn-btn-gradient:  <%= _btnBgFinal %>;
+            --dyn-btn-text:      <%= _btnTextColor %>;
+            --dyn-section-bg:    <%= _sectionBgFinal %>;
+        }
+        body { background: var(--dyn-body-bg) !important; color: var(--dyn-text) !important; }
+        .navbar { background: var(--dyn-navbar-bg) !important; }
+        <% if (_navGrad) { %>
+        .navbar-brand, .navbar-brand span, .logo-container i { color:#ffffff !important; background:none !important; }
+        <% } else if (_c.logoTextColor) { %>
+        .navbar-brand, .navbar-brand span, .logo-container i { color:<%= _logoColor %> !important; background:none !important; }
+        <% } %>
+        .navbar-nav .nav-link { color: var(--dyn-nav-link) !important; }
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus,
+        .navbar-nav .nav-link.active {
+            background: var(--dyn-nav-hover-bg) !important;
+            color: var(--dyn-nav-hover-text) !important;
+        }
+        .profile-banner { background: var(--dyn-section-bg) !important; }
+        .btn-primary, .btn-save-config, .btn-save-profile {
+            background: var(--dyn-btn-gradient) !important;
+            color: var(--dyn-btn-text) !important;
+            border: none !important;
+        }
+    </style>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fb;
+            padding-top: 76px;
+        }
+        
+        .profile-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 0 30px;
+            margin-bottom: 40px;
+            border-radius: 0 0 30px 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .profile-avatar:hover .avatar-overlay {
+            opacity: 1;
+        }
+        
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .avatar-overlay i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-banner-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid rgba(255,255,255,0.9);
+            margin: 0 auto 20px;
+            background: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .profile-banner-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .profile-email {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-modern {
+            background: white;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .card-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+        
+        .card-header-modern {
+            background: white;
+            border-bottom: 2px solid #667eea;
+            padding: 20px 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .card-header-modern i {
+            color: #667eea;
+            margin-right: 10px;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            color: #718096;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+            word-break: break-word;
+        }
+        
+        .form-group-modern {
+            margin-bottom: 20px;
+        }
+        
+        .form-group-modern label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-control-modern {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .form-control-modern:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        
+        textarea.form-control-modern {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn-update {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-update:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(102,126,234,0.3);
+        }
+        
+        .btn-password {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 100%;
+        }
+        
+        .btn-password:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(237,137,54,0.3);
+        }
+        
+        .alert-custom {
+            border-radius: 12px;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success-custom {
+            background: linear-gradient(135deg, #d4fcda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+        
+        .alert-danger-custom {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+        
+        .upload-progress {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .spinner-border {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .password-strength {
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .strength-weak { color: #dc3545; }
+        .strength-medium { color: #ffc107; }
+        .strength-strong { color: #28a745; }
+        
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .profile-banner {
+                margin-top: 0;
+                border-radius: 0 0 20px 20px;
+            }
+
+            .profile-header {
+                padding: 30px 0 20px;
+            }
+            
+            .profile-avatar {
+                width: 90px;
+                height: 90px;
+                font-size: 45px;
+            }
+            
+            .profile-name {
+                font-size: 1.5rem;
+            }
+            
+            .profile-stats {
+                gap: 15px;
+            }
+            
+            .stat-badge {
+                padding: 6px 15px;
+                font-size: 0.85rem;
+            }
+            
+            .card-header-modern {
+                padding: 15px 20px;
+            }
+            
+            .info-card {
+                margin-bottom: 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .profile-stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .stat-badge {
+                width: 80%;
+                text-align: center;
+            }
+            
+            .btn-update, .btn-password {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card-modern {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.6s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .dropdown-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <div class="logo-container">
+                    <% if (negocio.logoHeader && negocio.logoHeader.image && negocio.logoHeader.type !== 'text') { %>
+                        <img src="<%= negocio.logoHeader.image %>" alt="<%= negocio.nombre %>" style="width: <%= negocio.logoHeader?.size || 150 %>px; max-width: 100%; object-fit: contain;">
+                    <% } else { %>
+                        <i class="fas fa-store"></i>
+                        <span><%= negocio.logoHeader && negocio.logoHeader.text ? negocio.logoHeader.text : negocio.nombre %></span>
+                    <% } %>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/productos"><i class="fas fa-shopping-bag"></i> Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/carrito"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
+                    <% if (user) { %>
+                        <li class="nav-item"><a class="nav-link" href="/mis-pedidos"><i class="fas fa-truck"></i> Mis Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/perfil"><i class="fas fa-user-circle"></i> <%= user.nombre %></a></li>
+                        <% if (user.rol === 'admin') { %>
+                            <li class="nav-item"><a class="nav-link" href="/admin"><i class="fas fa-chart-line"></i> Admin</a></li>
+                        <% } %>
+                        <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
+                    <% } else { %>
+                        <li class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-key"></i> Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Registro</a></li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header del perfil -->
+    <div class="profile-banner">
+        <div class="container">
+            <div class="text-center">
+                <div class="profile-banner-avatar">
+                    <% if (user.foto_perfil) { %>
+                        <img src="<%= user.foto_perfil %>" alt="Foto de perfil">
+                    <% } else { %>
+                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f7fb; color:#667eea;">
+                            <i class="fas fa-user-circle" style="font-size:50px;"></i>
+                        </div>
+                    <% } %>
+                </div>
+                <h1 class="profile-name"><i class="fas fa-user-circle"></i> <%= user.nombre %></h1>
+                <p class="profile-email" style="margin: 10px 0 0;"><i class="fas fa-envelope"></i> <%= user.email %></p>
+                <div class="profile-stats">
+                    <div class="stat-badge">
+                        <i class="fas fa-tag"></i> <strong><%= user.rol === 'admin' ? 'Administrador' : 'Cliente' %></strong>
+                    </div>
+                    <div class="stat-badge">
+                        <i class="fas fa-check-circle"></i> <strong class="text-success">Activo</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Columna izquierda - Información rápida -->
+            <div class="col-lg-4 mb-4">
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <i class="fas fa-info-circle"></i> Información Rápida
+                    </div>
+                    <div class="p-4">
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-user"></i> Nombre completo
+                            </div>
+                            <div class="info-value"><%= user.nombre %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-envelope"></i> Correo electrónico
+                            </div>
+                            <div class="info-value"><%= user.email %></div>
+                        </div>
+                        <% if (user.telefono) { %>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-phone"></i> Teléfono
+                                </div>
+                                <div class="info-value"><%= user.telefono %></div>
+                            </div>
+                        <% } %>
+                        <% if (user.direccion) { %>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-map-marker-alt"></i> Dirección
+                                </div>
+                                <div class="info-value"><%= user.direccion %></div>
+                            </div>
+                        <% } %>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-id-badge"></i> Rol
+                            </div>
+                            <div class="info-value">
+                                <span class="badge bg-primary"><%= user.rol === 'admin' ? 'Administrador' : 'Cliente' %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta de estadísticas -->
+                <div class="info-card text-center">
+                    <i class="fas fa-shopping-bag" style="font-size: 40px; margin-bottom: 15px;"></i>
+                    <h3 class="mb-2">¡Bienvenido!</h3>
+                    <p class="mb-0">Mantén tu información actualizada para recibir mejores ofertas</p>
+                </div>
+            </div>
+            
+            <!-- Columna derecha - Formularios de edición -->
+            <div class="col-lg-8">
+                <!-- Formulario de editar perfil -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <i class="fas fa-camera"></i> Foto de Perfil
+                    </div>
+                    <div class="p-4">
+                        <div class="text-center">
+                            <div class="profile-avatar" id="avatarContainer" style="margin: 0 auto 20px;">
+                                <% if (user.foto_perfil) { %>
+                                    <img src="<%= user.foto_perfil %>" alt="Foto de perfil" id="avatarImg">
+                                <% } else { %>
+                                    <i class="fas fa-user-circle" id="avatarIcon"></i>
+                                <% } %>
+                                <div class="avatar-overlay" id="avatarOverlay">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Cambiar foto</span>
+                                </div>
+                            </div>
+                            <p class="text-muted">Haz clic en tu foto para cambiarla</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <i class="fas fa-edit"></i> Editar Perfil
+                    </div>
+                    <div class="p-4">
+                        <form id="profileForm">
+                            <div class="form-group-modern">
+                                <label for="nombre">
+                                    <i class="fas fa-user text-primary"></i> Nombre completo *
+                                </label>
+                                <input type="text" class="form-control-modern" id="nombre" name="nombre" 
+                                       value="<%= user.nombre %>" required>
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="email">
+                                    <i class="fas fa-envelope text-primary"></i> Correo electrónico
+                                </label>
+                                <input type="email" class="form-control-modern" id="email" 
+                                       value="<%= user.email %>" disabled>
+                                <small class="text-muted">El correo electrónico no puede ser modificado</small>
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="telefono">
+                                    <i class="fas fa-phone text-primary"></i> Teléfono
+                                </label>
+                                <input type="tel" class="form-control-modern" id="telefono" name="telefono" 
+                                       value="<%= user.telefono || '' %>" placeholder="+54 11 1234-5678">
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="direccion">
+                                    <i class="fas fa-map-marker-alt text-primary"></i> Dirección
+                                </label>
+                                <textarea class="form-control-modern" id="direccion" name="direccion" 
+                                          rows="3" placeholder="Calle, número, ciudad, código postal"><%= user.direccion || '' %></textarea>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn-update" id="updateBtn">
+                                    <i class="fas fa-save"></i> Actualizar Perfil
+                                </button>
+                                <a href="/" class="btn btn-secondary" style="border-radius: 12px; padding: 12px 30px;">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Formulario de cambiar contraseña -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <i class="fas fa-key"></i> Cambiar Contraseña
+                    </div>
+                    <div class="p-4">
+                        <form id="passwordForm">
+                            <div class="form-group-modern">
+                                <label for="current_password">
+                                    <i class="fas fa-lock text-primary"></i> Contraseña actual *
+                                </label>
+                                <input type="password" class="form-control-modern" id="current_password" 
+                                       name="current_password" required>
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="new_password">
+                                    <i class="fas fa-key text-primary"></i> Nueva contraseña *
+                                </label>
+                                <input type="password" class="form-control-modern" id="new_password" 
+                                       name="new_password" required>
+                                <small class="text-muted">Mínimo 6 caracteres</small>
+                                <div id="passwordStrength" class="password-strength"></div>
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="confirm_password">
+                                    <i class="fas fa-check-circle text-primary"></i> Confirmar nueva contraseña *
+                                </label>
+                                <input type="password" class="form-control-modern" id="confirm_password" 
+                                       name="confirm_password" required>
+                                <div id="confirmMatch" class="password-strength"></div>
+                            </div>
+                            
+                            <button type="submit" class="btn-password" id="passwordBtn">
+                                <i class="fas fa-sync-alt"></i> Cambiar Contraseña
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <% if (user.rol === 'admin') { %>
+                <!-- Configuración de Negocio (Solo para Admins) -->
+                <div class="card-modern" style="border: 2px solid #ffc107;">
+                    <div class="card-header-modern" style="background-color: #fff3cd; color: #856404;">
+                        <i class="fas fa-cog"></i> Configuración de Negocio
+                    </div>
+                    <div class="p-4">
+                        <form id="configForm" method="POST" action="/perfil/config" enctype="multipart/form-data">
+                            <h6 class="mb-3"><i class="fas fa-info-circle"></i> Información de la Tienda</h6>
+                            
+                            <div class="form-group-modern">
+                                <label for="nombreNegocio">
+                                    <i class="fas fa-store text-warning"></i> Nombre de la Tienda
+                                </label>
+                                <input type="text" class="form-control-modern" id="nombreNegocio" name="nombreNegocio" 
+                                       value="<%= negocio.nombre %>" placeholder="Nombre del negocio">
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="emailNegocio">
+                                    <i class="fas fa-envelope text-warning"></i> Email de Contacto
+                                </label>
+                                <input type="email" class="form-control-modern" id="emailNegocio" name="emailNegocio" 
+                                       value="<%= negocio.email %>" placeholder="email@tienda.com">
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="telefonoNegocio">
+                                    <i class="fas fa-phone text-warning"></i> Teléfono Principal
+                                </label>
+                                <input type="tel" class="form-control-modern" id="telefonoNegocio" name="telefonoNegocio" 
+                                       value="<%= negocio.telefono %>" placeholder="+54 11 XXXX-XXXX">
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="direccionNegocio">
+                                    <i class="fas fa-map-marker-alt text-warning"></i> Dirección de la Tienda
+                                </label>
+                                <input type="text" class="form-control-modern" id="direccionNegocio" name="direccionNegocio" 
+                                       value="<%= negocio.direccion %>" placeholder="Calle, número, ciudad">
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="descripcion">
+                                    <i class="fas fa-align-left text-warning"></i> Descripción de la Tienda
+                                </label>
+                                <textarea class="form-control-modern" id="descripcion" name="descripcion" 
+                                          rows="3" placeholder="Descripción breve de tu tienda"><%= negocio.descripcion %></textarea>
+                            </div>
+                            
+                            <hr class="my-4">
+                            <h6 class="mb-3"><i class="fas fa-whatsapp"></i> Configuración de WhatsApp</h6>
+                            
+                            <div class="alert alert-info" style="border-radius: 12px;">
+                                <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Este es el número donde recibirás los pedidos de los clientes
+                            </div>
+                            
+                            <div class="form-group-modern">
+                                <label for="whatsappAdmin">
+                                    <i class="fas fa-phone text-warning"></i> Número de WhatsApp para Pedidos *
+                                </label>
+                                <input type="tel" class="form-control-modern" id="whatsappAdmin" name="whatsappAdmin" 
+                                       value="<%= negocio.whatsappAdmin %>" placeholder="54 9 XXXX XXXXXX" required>
+                                <small class="text-muted">Formato: Código país + número sin el +</small>
+                            </div>
+                            
+                            <hr class="my-4">
+                            <h6 class="mb-3"><i class="fas fa-phone-alt"></i> Teléfono para el Footer</h6>
+                            
+                            <div class="form-group-modern">
+                                <label for="footerTelefono">
+                                    <i class="fas fa-phone text-warning"></i> Teléfono de Contacto
+                                </label>
+                                <input type="tel" class="form-control-modern" id="footerTelefono" name="footerTelefono" 
+                                       value="<%= negocio.footerTelefono %>" placeholder="+54 11 XXXX-XXXX">
+                            </div>
+                            
+                            <hr class="my-4">
+                            <h6 class="mb-3"><i class="fas fa-image"></i> Logo del Header</h6>
+                            
+                            <div class="form-group-modern">
+                                <label>Tipo de Logo</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="logoHeaderType" id="logoHeaderText" value="text" <%= (negocio.logoHeader?.type || 'text') === 'text' ? 'checked' : '' %>>
+                                        <label class="form-check-label" for="logoHeaderText">
+                                            <i class="fas fa-font"></i> Texto
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="logoHeaderType" id="logoHeaderImage" value="image" <%= (negocio.logoHeader?.type || 'text') === 'image' ? 'checked' : '' %>>
+                                        <label class="form-check-label" for="logoHeaderImage">
+                                            <i class="fas fa-image"></i> Imagen
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group-modern" id="logoHeaderTextGroup" style="<%= (negocio.logoHeader?.type || 'text') === 'text' ? '' : 'display: none;' %>">
+                                <label for="logoHeaderText">
+                                    <i class="fas fa-font text-warning"></i> Texto del Logo
+                                </label>
+                                <input type="text" class="form-control-modern" id="logoHeaderText" name="logoHeaderText" 
+                                       value="<%= negocio.logoHeader?.text || 'Tienda Elegante' %>" placeholder="Texto del logo">
+                            </div>
+                            
+                            <div class="form-group-modern" id="logoHeaderImageGroup" style="<%= (negocio.logoHeader?.type || 'text') === 'image' ? '' : 'display: none;' %>">
+                                <label for="logoHeaderFile">
+                                    <i class="fas fa-image text-warning"></i> Selecciona el logo del Header
+                                </label>
+                                <input type="file" class="form-control-modern" id="logoHeaderFile" name="logoHeaderFile" accept="image/*"
+                                       onchange="handleLogoFileChange(event, 'Header')">
+                                <input type="hidden" id="logoHeaderImage" name="logoHeaderImage" value="<%= negocio.logoHeader?.image || '' %>">
+                                <input type="hidden" id="logoHeaderSize" name="logoHeaderSize" value="<%= negocio.logoHeader?.size || 150 %>">
+                                <div class="logo-preview mt-3" id="logoHeaderPreviewContainer" style="<%= (negocio.logoHeader?.type || 'text') === 'image' ? '' : 'display:none;' %>">
+                                    <label class="form-label">Vista previa</label>
+                                    <img id="logoHeaderPreviewImg" src="<%= negocio.logoHeader?.image || '' %>" alt="Vista previa logo header" style="width: <%= negocio.logoHeader?.size || 150 %>px; max-width: 100%; object-fit: contain; <%= negocio.logoHeader?.image ? '' : 'display:none;' %>">
+                                </div>
+                                <div class="form-group-modern" id="logoHeaderSizeGroup" style="<%= (negocio.logoHeader?.type || 'text') === 'image' ? '' : 'display:none;' %>">
+                                    <label for="logoHeaderSizeSlider">
+                                        <i class="fas fa-arrows-alt-h text-warning"></i> Tamaño del logo
+                                    </label>
+                                    <input type="range" class="form-range" id="logoHeaderSizeSlider" min="50" max="300" value="<%= negocio.logoHeader?.size || 150 %>" onchange="updateLogoSize('Header', this.value)">
+                                    <small id="logoHeaderSizeLabel"><%= negocio.logoHeader?.size || 150 %> px</small>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            <h6 class="mb-3"><i class="fas fa-image"></i> Logo del Footer</h6>
+                            
+                            <div class="form-group-modern">
+                                <label>Tipo de Logo</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="logoFooterType" id="logoFooterText" value="text" <%= (negocio.logoFooter?.type || 'text') === 'text' ? 'checked' : '' %>>
+                                        <label class="form-check-label" for="logoFooterText">
+                                            <i class="fas fa-font"></i> Texto
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="logoFooterType" id="logoFooterImage" value="image" <%= (negocio.logoFooter?.type || 'text') === 'image' ? 'checked' : '' %>>
+                                        <label class="form-check-label" for="logoFooterImage">
+                                            <i class="fas fa-image"></i> Imagen
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group-modern" id="logoFooterTextGroup" style="<%= (negocio.logoFooter?.type || 'text') === 'text' ? '' : 'display: none;' %>">
+                                <label for="logoFooterText">
+                                    <i class="fas fa-font text-warning"></i> Texto del Logo
+                                </label>
+                                <input type="text" class="form-control-modern" id="logoFooterText" name="logoFooterText" 
+                                       value="<%= negocio.logoFooter?.text || 'Tienda Elegante' %>" placeholder="Texto del logo">
+                            </div>
+                            
+                            <div class="form-group-modern" id="logoFooterImageGroup" style="<%= (negocio.logoFooter?.type || 'text') === 'image' ? '' : 'display: none;' %>">
+                                <label for="logoFooterFile">
+                                    <i class="fas fa-image text-warning"></i> Selecciona el logo del Footer
+                                </label>
+                                <input type="file" class="form-control-modern" id="logoFooterFile" name="logoFooterFile" accept="image/*"
+                                       onchange="handleLogoFileChange(event, 'Footer')">
+                                <input type="hidden" id="logoFooterImage" name="logoFooterImage" value="<%= negocio.logoFooter?.image || '' %>">
+                                <input type="hidden" id="logoFooterSize" name="logoFooterSize" value="<%= negocio.logoFooter?.size || 120 %>">
+                                <div class="logo-preview mt-3" id="logoFooterPreviewContainer" style="<%= (negocio.logoFooter?.type || 'text') === 'image' ? '' : 'display:none;' %>">
+                                    <label class="form-label">Vista previa</label>
+                                    <img id="logoFooterPreviewImg" src="<%= negocio.logoFooter?.image || '' %>" alt="Vista previa logo footer" style="width: <%= negocio.logoFooter?.size || 120 %>px; max-width: 100%; object-fit: contain; <%= negocio.logoFooter?.image ? '' : 'display:none;' %>">
+                                </div>
+                                <div class="form-group-modern" id="logoFooterSizeGroup" style="<%= (negocio.logoFooter?.type || 'text') === 'image' ? '' : 'display:none;' %>">
+                                    <label for="logoFooterSizeSlider">
+                                        <i class="fas fa-arrows-alt-h text-warning"></i> Tamaño del logo
+                                    </label>
+                                    <input type="range" class="form-range" id="logoFooterSizeSlider" min="50" max="300" value="<%= negocio.logoFooter?.size || 120 %>" onchange="updateLogoSize('Footer', this.value)">
+                                    <small id="logoFooterSizeLabel"><%= negocio.logoFooter?.size || 120 %> px</small>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            <h6 class="mb-3"><i class="fas fa-share-alt"></i> Redes Sociales</h6>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group-modern">
+                                        <label for="facebook">
+                                            <i class="fab fa-facebook text-primary"></i> Facebook
+                                        </label>
+                                        <input type="url" class="form-control-modern" id="facebook" name="facebook" 
+                                               value="<%= negocio.redesSociales?.facebook || '' %>" placeholder="https://facebook.com/...">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group-modern">
+                                        <label for="instagram">
+                                            <i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram
+                                        </label>
+                                        <input type="url" class="form-control-modern" id="instagram" name="instagram" 
+                                               value="<%= negocio.redesSociales?.instagram || '' %>" placeholder="https://instagram.com/...">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group-modern">
+                                        <label for="whatsapp">
+                                            <i class="fab fa-whatsapp text-success"></i> WhatsApp (Enlace)
+                                        </label>
+                                        <input type="tel" class="form-control-modern" id="whatsapp" name="whatsapp" 
+                                               value="<%= negocio.redesSociales?.whatsapp || '' %>" placeholder="549 XXXX XXXXXX">
+                                        <small class="text-muted">Solo números (sin +)</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group-modern">
+                                        <label for="twitter">
+                                            <i class="fab fa-twitter" style="color: #1DA1F2;"></i> Twitter
+                                        </label>
+                                        <input type="url" class="form-control-modern" id="twitter" name="twitter" 
+                                               value="<%= negocio.redesSociales?.twitter || '' %>" placeholder="https://twitter.com/...">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group-modern">
+                                        <label for="youtube">
+                                            <i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube
+                                        </label>
+                                        <input type="url" class="form-control-modern" id="youtube" name="youtube" 
+                                               value="<%= negocio.redesSociales?.youtube || '' %>" placeholder="https://youtube.com/...">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group-modern">
+                                        <label for="linkedin">
+                                            <i class="fab fa-linkedin" style="color: #0077B5;"></i> LinkedIn
+                                        </label>
+                                        <input type="url" class="form-control-modern" id="linkedin" name="linkedin" 
+                                               value="<%= negocio.redesSociales?.linkedin || '' %>" placeholder="https://linkedin.com/...">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group-modern">
+                                        <label for="tiktok">
+                                            <i class="fab fa-tiktok" style="color: #010101;"></i> TikTok
+                                        </label>
+                                        <input type="url" class="form-control-modern" id="tiktok" name="tiktok" 
+                                               value="<%= negocio.redesSociales?.tiktok || '' %>" placeholder="https://tiktok.com/@...">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-warning" style="border-radius: 12px; margin-top: 20px;">
+                                <i class="fas fa-info-circle"></i> <strong>Nota:</strong> Los cambios se aplicarán en todas las páginas de la tienda
+                            </div>
+                            
+                            <button type="submit" class="btn-update" id="configBtn">
+                                <i class="fas fa-save"></i> Guardar Configuración
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <% } %>
+                
+                <div class="card-modern bg-light">
+                    <div class="card-header-modern">
+                        <i class="fas fa-shield-alt"></i> Consejos de Seguridad
+                    </div>
+                    <div class="p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <i class="fas fa-check-circle text-success mt-1"></i>
+                                    <div>
+                                        <strong>Contraseña segura</strong>
+                                        <p class="text-muted small mb-0">Usa al menos 8 caracteres con letras y números</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <i class="fas fa-check-circle text-success mt-1"></i>
+                                    <div>
+                                        <strong>No compartas tu cuenta</strong>
+                                        <p class="text-muted small mb-0">Mantén tus datos de acceso privados</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <i class="fas fa-check-circle text-success mt-1"></i>
+                                    <div>
+                                        <strong>Actualiza tu información</strong>
+                                        <p class="text-muted small mb-0">Mantén tus datos de contacto actualizados</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <i class="fas fa-check-circle text-success mt-1"></i>
+                                    <div>
+                                        <strong>Cierra sesión</strong>
+                                        <p class="text-muted small mb-0">Siempre cierra sesión en dispositivos compartidos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <%- include('./footer') %>
+
+    <!-- Input oculto para seleccionar archivo -->
+    <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;">
+    
+    <!-- Progress overlay -->
+    <div class="upload-progress" id="uploadProgress">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 mb-0">Subiendo foto...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+<script>
+    // ==================== MANEJO DE MENSAJES DE URL ====================
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMsg = urlParams.get('success');
+    const errorMsg = urlParams.get('error');
+    
+    if (successMsg) {
+        showSuccess(decodeURIComponent(successMsg));
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    if (errorMsg) {
+        showError(decodeURIComponent(errorMsg));
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    // ==================== MANEJO DE FOTO DE PERFIL ====================
+    const avatarContainer = document.getElementById('avatarContainer');
+    const fotoInput = document.getElementById('fotoInput');
+    const uploadProgress = document.getElementById('uploadProgress');
+
+    if (avatarContainer) {
+        avatarContainer.addEventListener('click', function(e) {
+            console.log("Click en avatar");
+            fotoInput.click();
+        });
+    }
+
+    fotoInput.addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        console.log("Archivo seleccionado:", file);
+        
+        if (!file) return;
+        
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            showError('Solo se permiten imágenes (JPEG, PNG, GIF, WEBP)');
+            return;
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+            showError('La imagen no puede superar los 5MB');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('foto_perfil', file);
+        
+        uploadProgress.style.display = 'block';
+        
+        try {
+            const response = await fetch('/perfil/foto', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            console.log("Respuesta del servidor:", result);
+            
+            uploadProgress.style.display = 'none';
+            
+            if (result.success) {
+                // Actualizar la imagen en el banner
+                const bannerAvatar = document.querySelector('.profile-banner-avatar');
+                if (bannerAvatar) {
+                    if (result.fotoUrl) {
+                        bannerAvatar.innerHTML = `<img src="${result.fotoUrl}" alt="Foto de perfil">`;
+                    } else {
+                        bannerAvatar.innerHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f7fb; color:#667eea;">
+                            <i class="fas fa-user-circle" style="font-size:50px;"></i>
+                        </div>`;
+                    }
+                }
+                
+                // Actualizar el avatar del formulario
+                const avatarContainerDiv = document.getElementById('avatarContainer');
+                if (avatarContainerDiv) {
+                    if (result.fotoUrl) {
+                        avatarContainerDiv.innerHTML = `
+                            <img src="${result.fotoUrl}" alt="Foto de perfil" id="avatarImg" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            <div class="avatar-overlay">
+                                <i class="fas fa-camera"></i>
+                                <span>Cambiar foto</span>
+                            </div>
+                        `;
+                    } else {
+                        avatarContainerDiv.innerHTML = `
+                            <i class="fas fa-user-circle" id="avatarIcon"></i>
+                            <div class="avatar-overlay">
+                                <i class="fas fa-camera"></i>
+                                <span>Cambiar foto</span>
+                            </div>
+                        `;
+                    }
+                }
+                
+                showSuccess('Foto de perfil actualizada correctamente');
+            } else {
+                showError(result.error || 'Error al subir la foto');
+            }
+        } catch (error) {
+            uploadProgress.style.display = 'none';
+            console.error('Error:', error);
+            showError('Error al subir la foto. Intenta nuevamente.');
+        }
+        
+        fotoInput.value = '';
+    });
+    
+    // ==================== FORMULARIO PERFIL (versión JSON) ====================
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            console.log("=== Enviando formulario de perfil ===");
+            
+            const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value;
+            const direccion = document.getElementById('direccion').value;
+            
+            console.log("Datos a enviar:", { nombre, telefono, direccion });
+            
+            if (!nombre || nombre.trim() === '') {
+                showError('El nombre es obligatorio');
+                return;
+            }
+            
+            const btn = document.getElementById('updateBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading"></span> Guardando...';
+            btn.disabled = true;
+            
+            try {
+                // Enviar como JSON
+                const data = {
+                    nombre: nombre.trim(),
+                    telefono: telefono || '',
+                    direccion: direccion || ''
+                };
+                
+                const response = await fetch('/perfil', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log("Respuesta status:", response.status);
+                
+                let result;
+                const textResponse = await response.text();
+                console.log("Respuesta texto:", textResponse);
+                
+                try {
+                    result = JSON.parse(textResponse);
+                } catch (e) {
+                    console.error("Error parsing JSON:", e);
+                    throw new Error('Respuesta inválida del servidor');
+                }
+                
+                if (result.success) {
+                    showSuccess('Perfil actualizado correctamente');
+                    
+                    // Actualizar el nombre en el navbar
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        if (link.href && link.href.includes('/perfil')) {
+                            link.innerHTML = `<i class="fas fa-user-circle"></i> ${result.nombre}`;
+                        }
+                    });
+                    
+                    // Actualizar el nombre en el banner
+                    document.querySelectorAll('.profile-name').forEach(el => {
+                        el.innerHTML = `<i class="fas fa-user-circle"></i> ${result.nombre}`;
+                    });
+                    
+                    // Actualizar el nombre en la información rápida
+                    const infoValues = document.querySelectorAll('.info-value');
+                    infoValues.forEach(el => {
+                        const label = el.previousElementSibling;
+                        if (label && label.textContent.trim().includes('Nombre completo')) {
+                            el.textContent = result.nombre;
+                        }
+                    });
+                } else {
+                    showError(result.error || 'Error al actualizar el perfil');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al actualizar el perfil. Intenta nuevamente.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    }
+    
+    // ==================== FORMULARIO CONTRASEÑA (versión JSON) ====================
+    const passwordFormEl = document.getElementById('passwordForm');
+    if (passwordFormEl) {
+        passwordFormEl.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            console.log("=== Enviando formulario de contraseña ===");
+            
+            const currentPwd = document.getElementById('current_password').value;
+            const newPwd = document.getElementById('new_password').value;
+            const confirmPwd = document.getElementById('confirm_password').value;
+            
+            if (!currentPwd || !newPwd || !confirmPwd) {
+                showError('Por favor complete todos los campos');
+                return;
+            }
+            
+            if (newPwd !== confirmPwd) {
+                showError('Las contraseñas no coinciden');
+                return;
+            }
+            
+            if (newPwd.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            const btn = document.getElementById('passwordBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading"></span> Cambiando...';
+            btn.disabled = true;
+            
+            try {
+                const data = {
+                    current_password: currentPwd,
+                    new_password: newPwd,
+                    confirm_password: confirmPwd
+                };
+                
+                const response = await fetch('/cambiar-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log("Respuesta status:", response.status);
+                
+                let result;
+                const textResponse = await response.text();
+                console.log("Respuesta texto:", textResponse);
+                
+                try {
+                    result = JSON.parse(textResponse);
+                } catch (e) {
+                    console.error("Error parsing JSON:", e);
+                    throw new Error('Respuesta inválida del servidor');
+                }
+                
+                if (result.success) {
+                    showSuccess('Contraseña cambiada correctamente');
+                    document.getElementById('current_password').value = '';
+                    document.getElementById('new_password').value = '';
+                    document.getElementById('confirm_password').value = '';
+                    document.getElementById('passwordStrength').innerHTML = '';
+                    document.getElementById('confirmMatch').innerHTML = '';
+                } else {
+                    showError(result.error || 'Error al cambiar la contraseña');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al cambiar la contraseña: ' + (error.message || 'Intenta nuevamente.'));
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    }
+    
+    // ==================== VALIDACIÓN DE CONTRASEÑA ====================
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        if (password.length >= 6) strength++;
+        if (password.length >= 8) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[^A-Za-z0-9]/.test(password)) strength++;
+        
+        if (strength <= 2) return { text: 'Débil', class: 'strength-weak' };
+        if (strength <= 4) return { text: 'Media', class: 'strength-medium' };
+        return { text: 'Fuerte', class: 'strength-strong' };
+    }
+    
+    const newPasswordInput = document.getElementById('new_password');
+    const passwordStrengthDiv = document.getElementById('passwordStrength');
+    
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', function() {
+            const strength = checkPasswordStrength(this.value);
+            passwordStrengthDiv.innerHTML = `Fortaleza: <span class="${strength.class}">${strength.text}</span>`;
+        });
+    }
+    
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const confirmMatchDiv = document.getElementById('confirmMatch');
+    
+    function checkPasswordMatch() {
+        const newPassword = newPasswordInput ? newPasswordInput.value : '';
+        const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
+        
+        if (confirmPassword === '') {
+            confirmMatchDiv.innerHTML = '';
+        } else if (newPassword === confirmPassword) {
+            confirmMatchDiv.innerHTML = '<span class="strength-strong">✓ Las contraseñas coinciden</span>';
+        } else {
+            confirmMatchDiv.innerHTML = '<span class="strength-weak">✗ Las contraseñas no coinciden</span>';
+        }
+    }
+    
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+    }
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', checkPasswordMatch);
+    }
+    
+    // ==================== FUNCIONES DE ALERTA ====================
+    function showError(message) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-danger-custom alert-custom alert-dismissible fade show';
+        alertDiv.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const container = document.querySelector('.col-lg-8');
+        if (container) {
+            const firstCard = container.querySelector('.card-modern');
+            if (firstCard) {
+                container.insertBefore(alertDiv, firstCard);
+            } else {
+                container.insertBefore(alertDiv, container.firstChild);
+            }
+        }
+        
+        setTimeout(() => {
+            if (alertDiv.parentNode) alertDiv.remove();
+        }, 5000);
+    }
+    
+    function showSuccess(message) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-success-custom alert-custom alert-dismissible fade show';
+        alertDiv.innerHTML = `
+            <i class="fas fa-check-circle"></i> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const container = document.querySelector('.col-lg-8');
+        if (container) {
+            const firstCard = container.querySelector('.card-modern');
+            if (firstCard) {
+                container.insertBefore(alertDiv, firstCard);
+            } else {
+                container.insertBefore(alertDiv, container.firstChild);
+            }
+        }
+        
+        setTimeout(() => {
+            if (alertDiv.parentNode) alertDiv.remove();
+        }, 5000);
+    }
+    
+    // ==================== FUNCIONES PARA LOGOS ====================
+    function handleLogoFileChange(event, type) {
+        const input = event.target;
+        const previewImg = document.getElementById(`logo${type}PreviewImg`);
+        const previewContainer = document.getElementById(`logo${type}PreviewContainer`);
+        const hiddenImage = document.getElementById(`logo${type}Image`);
+        const sizeValue = document.getElementById(`logo${type}SizeSlider`)?.value || (type === 'Header' ? 150 : 120);
+
+        if (!input.files || !input.files[0]) {
+            return;
+        }
+
+        const file = input.files[0];
+        if (!file.type.startsWith('image/')) {
+            showError('Selecciona un archivo de imagen válido');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewImg.style.display = 'block';
+            previewImg.style.width = `${sizeValue}px`;
+            previewContainer.style.display = 'block';
+            if (hiddenImage) {
+                hiddenImage.value = '';
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function updateLogoSize(type, value) {
+        const previewImg = document.getElementById(`logo${type}PreviewImg`);
+        const hiddenSize = document.getElementById(`logo${type}Size`);
+        const label = document.getElementById(`logo${type}SizeLabel`);
+
+        if (previewImg) {
+            previewImg.style.width = `${value}px`;
+            previewImg.style.display = 'block';
+        }
+        if (hiddenSize) {
+            hiddenSize.value = value;
+        }
+        if (label) {
+            label.textContent = `${value} px`;
+        }
+    }
+    
+    // ==================== LOGO TYPE TOGGLE ====================
+    function toggleLogoFields() {
+        // Header logo
+        const headerTextRadios = document.querySelectorAll('input[name="logoHeaderType"]');
+        const headerTextGroup = document.getElementById('logoHeaderTextGroup');
+        const headerImageGroup = document.getElementById('logoHeaderImageGroup');
+        
+        if (headerTextRadios.length > 0) {
+            headerTextRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'text') {
+                        if (headerTextGroup) headerTextGroup.style.display = 'block';
+                        if (headerImageGroup) headerImageGroup.style.display = 'none';
+                    } else {
+                        if (headerTextGroup) headerTextGroup.style.display = 'none';
+                        if (headerImageGroup) headerImageGroup.style.display = 'block';
+                    }
+                });
+            });
+        }
+        
+        // Footer logo
+        const footerTextRadios = document.querySelectorAll('input[name="logoFooterType"]');
+        const footerTextGroup = document.getElementById('logoFooterTextGroup');
+        const footerImageGroup = document.getElementById('logoFooterImageGroup');
+        
+        if (footerTextRadios.length > 0) {
+            footerTextRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'text') {
+                        if (footerTextGroup) footerTextGroup.style.display = 'block';
+                        if (footerImageGroup) footerImageGroup.style.display = 'none';
+                    } else {
+                        if (footerTextGroup) footerTextGroup.style.display = 'none';
+                        if (footerImageGroup) footerImageGroup.style.display = 'block';
+                    }
+                });
+            });
+        }
+    }
+    
+    // ==================== VALIDACIÓN FORMULARIO CONFIGURACIÓN ====================
+    const configForm = document.getElementById('configForm');
+    if (configForm) {
+        configForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const whatsappAdmin = document.getElementById('whatsappAdmin')?.value || '';
+            
+            if (!whatsappAdmin) {
+                showError('El número de WhatsApp es obligatorio');
+                return false;
+            }
+            
+            if (!/^\d+$/.test(whatsappAdmin)) {
+                showError('El número de WhatsApp debe contener solo números');
+                return false;
+            }
+            
+            const btn = document.getElementById('configBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading"></span> Guardando...';
+            btn.disabled = true;
+            
+            try {
+                const formData = new FormData(this);
+                formData.append('isAjax', 'true');
+                
+                const response = await fetch('/perfil/config', {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showSuccess('Configuración guardada correctamente');
+                    
+                    if (result.negocio?.logoHeader) {
+                        const navbarBrand = document.querySelector('.navbar-brand .logo-container');
+                        if (navbarBrand) {
+                            if (result.negocio.logoHeader.image && result.negocio.logoHeader.type !== 'text') {
+                                navbarBrand.innerHTML = `<img src="${result.negocio.logoHeader.image}?t=${Date.now()}" alt="${result.negocio.nombre}" style="width: 150px; max-width: 100%; object-fit: contain;">`;
+                            } else {
+                                navbarBrand.innerHTML = `<i class="fas fa-store"></i><span>${result.negocio.logoHeader.text || result.negocio.nombre}</span>`;
+                            }
+                        }
+                    }
+                    
+                    if (result.negocio?.nombre) {
+                        document.title = `Mi Perfil - ${result.negocio.nombre}`;
+                    }
+                    
+                } else {
+                    showError(result.error || 'Error al guardar la configuración');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al guardar la configuración. Intenta nuevamente.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+            
+            return false;
+        });
+    }
+    
+    // ==================== ANIMACIONES ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar toggle de logos
+        toggleLogoFields();
+        
+        // Animar tarjetas
+        const cards = document.querySelectorAll('.card-modern');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+    
+    // Inicializar tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+</body>
+</html>

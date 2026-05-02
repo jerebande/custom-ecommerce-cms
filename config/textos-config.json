@@ -1,0 +1,36 @@
+{
+  "productos": {
+    "titulo_seccion": "Nuestros Productos",
+    "subtitulo_seccion": "Descubre ",
+    "boton_agregar": "Agregar",
+    "mensaje_sin_stock": "Sin stock",
+    "mensaje_sin_productos": "No hay productos disponibles"
+  },
+  "carrito": {
+    "titulo_seccion": "Mi Carrito",
+    "subtitulo_seccion": "Revisa ",
+    "mensaje_vacio": "Tu carrito está vacío",
+    "mensaje_vacio_desc": "¡Explora nuestros productos y encuentra lo que te gusta!",
+    "boton_vaciar": "Vaciar Carrito",
+    "boton_ver_productos": "Ver Productos",
+    "boton_comprar": "Proceder al pago",
+    "resumen_titulo": "Resumen del Pedido",
+    "subtotal_label": "Subtotal:",
+    "envio_label": "Envío:",
+    "envio_texto": "Gratis",
+    "total_label": "Total:"
+  },
+  "mis_pedidos": {
+    "titulo_seccion": "Mis Pedidos",
+    "subtitulo_seccion": "Consulta el historial ",
+    "mensaje_vacio": "Sin pedidos aún",
+    "mensaje_vacio_desc": "No tienes pedidos registrados. ¡Comienza a explorar nuestros productos!",
+    "estado_entregado": "Entregado",
+    "estado_preparacion": "En Preparación",
+    "estado_pendiente": "Pendiente",
+    "info_direccion": "Dirección de Entrega",
+    "info_pago": "Método de Pago",
+    "productos_titulo": "Productos del Pedido",
+    "total_label": "Total del Pedido:"
+  }
+}
