@@ -81,22 +81,6 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <div class="logo-container">
-                    <% if (typeof negocio !== 'undefined' && negocio && negocio.logoHeader && negocio.logoHeader.type === 'image' && negocio.logoHeader.image) { %>
-                        <img src="<%= negocio.logoHeader.image %>" alt="logo"
-                             style="width:<%= negocio.logoHeader.size||150 %>px;max-width:100%;object-fit:contain;">
-                    <% } else { %>
-                        <i class="fas fa-store"></i>
-                        <span><%= (typeof negocio !== 'undefined' && negocio && negocio.nombre) ? negocio.nombre : 'Tienda' %></span>
-                    <% } %>
-                </div>
-            </a>
-        </div>
-    </nav>
-
     <div class="container">
         <div class="confirm-card text-center">
 

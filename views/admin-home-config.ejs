@@ -544,6 +544,86 @@
             <div id="featuresContainer"></div>
         </div>
 
+        <!-- CTA SECTION -->
+        <div class="section-label"><i class="fas fa-hand-point-right" style="color:var(--primary)"></i> Tarjeta "¿Listo para comenzar?"</div>
+        <div class="config-card">
+            <div class="config-card-header">
+                <div class="config-card-title">
+                    <div class="config-card-title-icon"><i class="fas fa-sign-in-alt"></i></div>
+                    Tarjeta de Llamada a la Acción (CTA)
+                </div>
+                <span style="font-size:0.8rem;color:var(--gray);">Visible solo para usuarios no logueados</span>
+            </div>
+            <hr class="card-divider">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Título</label>
+                    <input type="text" class="form-control" id="ctaTitulo" placeholder="¿Listo para comenzar?">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Subtítulo</label>
+                    <input type="text" class="form-control" id="ctaSubtitulo" placeholder="Únete a nuestra comunidad...">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Color de fondo de la tarjeta</label>
+                    <div class="d-flex gap-2 align-items-center">
+                        <input type="color" class="form-control form-control-color" id="ctaBgColor" value="#ffffff" style="width:56px;height:42px;padding:4px;">
+                        <input type="text" class="form-control" id="ctaBgColorText" placeholder="#ffffff" oninput="syncColor('ctaBgColor','ctaBgColorText')" style="flex:1;">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Color título</label>
+                    <div class="d-flex gap-2 align-items-center">
+                        <input type="color" class="form-control form-control-color" id="ctaTitleColor" value="#2d3748" style="width:56px;height:42px;padding:4px;">
+                        <input type="text" class="form-control" id="ctaTitleColorText" placeholder="#2d3748" oninput="syncColor('ctaTitleColor','ctaTitleColorText')" style="flex:1;">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Color subtítulo</label>
+                    <div class="d-flex gap-2 align-items-center">
+                        <input type="color" class="form-control form-control-color" id="ctaSubtitleColor" value="#718096" style="width:56px;height:42px;padding:4px;">
+                        <input type="text" class="form-control" id="ctaSubtitleColorText" placeholder="#718096" oninput="syncColor('ctaSubtitleColor','ctaSubtitleColorText')" style="flex:1;">
+                    </div>
+                </div>
+            </div>
+            <hr class="card-divider" style="margin-top:20px;">
+            <div class="row g-3">
+                <div class="col-12"><p class="form-label mb-0" style="font-size:0.8rem;color:var(--gray);"><i class="fas fa-mouse-pointer me-1"></i> Botones</p></div>
+                <div class="col-md-3">
+                    <label class="form-label">Texto "Iniciar Sesión"</label>
+                    <input type="text" class="form-control" id="ctaBtnLoginLabel" placeholder="Iniciar Sesión">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Color botón Login</label>
+                    <div class="d-flex gap-2 align-items-center">
+                        <input type="color" class="form-control form-control-color" id="ctaBtnLoginColor" value="#667eea" style="width:56px;height:42px;padding:4px;">
+                        <input type="text" class="form-control" id="ctaBtnLoginColorText" placeholder="#667eea" oninput="syncColor('ctaBtnLoginColor','ctaBtnLoginColorText')" style="flex:1;">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Texto "Registrarse"</label>
+                    <input type="text" class="form-control" id="ctaBtnRegisterLabel" placeholder="Registrarse">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Color botón Registro</label>
+                    <div class="d-flex gap-2 align-items-center">
+                        <input type="color" class="form-control form-control-color" id="ctaBtnRegisterColor" value="#28a745" style="width:56px;height:42px;padding:4px;">
+                        <input type="text" class="form-control" id="ctaBtnRegisterColorText" placeholder="#28a745" oninput="syncColor('ctaBtnRegisterColor','ctaBtnRegisterColorText')" style="flex:1;">
+                    </div>
+                </div>
+                <!-- Live preview -->
+                <div class="col-12 mt-2">
+                    <label class="form-label">Vista previa</label>
+                    <div id="ctaPreview" style="border-radius:16px;padding:32px;text-align:center;background:#ffffff;box-shadow:0 4px 16px rgba(0,0,0,0.08);transition:all 0.2s;">
+                        <h4 id="ctaPreviewTitle" style="font-weight:700;margin-bottom:8px;">¿Listo para comenzar?</h4>
+                        <p id="ctaPreviewSubtitle" style="color:#718096;margin-bottom:20px;">Únete a nuestra comunidad y disfruta de los mejores productos</p>
+                        <a id="ctaPreviewBtnLogin" href="#" onclick="return false;" style="display:inline-block;background:#667eea;color:#ffffff;border:none;border-radius:50px;padding:10px 28px;font-weight:600;text-decoration:none;margin-right:8px;">Iniciar Sesión</a>
+                        <a id="ctaPreviewBtnRegister" href="#" onclick="return false;" style="display:inline-block;background:#28a745;color:#ffffff;border:none;border-radius:50px;padding:10px 28px;font-weight:600;text-decoration:none;">Registrarse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- SAVE BAR -->
         <div class="save-bar">
             <span class="save-bar-hint"><i class="fas fa-info-circle me-1"></i> Los cambios se aplicarán en la tienda al guardar</span>
@@ -589,6 +669,19 @@
                         document.getElementById('iconoImg').style.display = 'block';
                         document.getElementById('btnEliminarIcono').style.display = 'inline-block';
                     }
+
+                    // Cargar CTA
+                    const cta = data.home?.cta || {};
+                    setCtaField('ctaTitulo', cta.titulo, '¿Listo para comenzar?');
+                    setCtaField('ctaSubtitulo', cta.subtitulo, 'Únete a nuestra comunidad y disfruta de los mejores productos');
+                    setCtaColor('ctaBgColor', 'ctaBgColorText', cta.bgColor || '#ffffff');
+                    setCtaColor('ctaTitleColor', 'ctaTitleColorText', cta.titleColor || '#2d3748');
+                    setCtaColor('ctaSubtitleColor', 'ctaSubtitleColorText', cta.subtitleColor || '#718096');
+                    setCtaField('ctaBtnLoginLabel', cta.btnLoginLabel, 'Iniciar Sesión');
+                    setCtaColor('ctaBtnLoginColor', 'ctaBtnLoginColorText', cta.btnLoginColor || '#667eea');
+                    setCtaField('ctaBtnRegisterLabel', cta.btnRegisterLabel, 'Registrarse');
+                    setCtaColor('ctaBtnRegisterColor', 'ctaBtnRegisterColorText', cta.btnRegisterColor || '#28a745');
+                    updateCtaPreview();
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -689,6 +782,17 @@
                     boton_url: document.getElementById('heroBotonUrl').value
                 },
                 features: features,
+                cta: {
+                    titulo: document.getElementById('ctaTitulo').value,
+                    subtitulo: document.getElementById('ctaSubtitulo').value,
+                    bgColor: document.getElementById('ctaBgColorText').value || '#ffffff',
+                    titleColor: document.getElementById('ctaTitleColorText').value || '#2d3748',
+                    subtitleColor: document.getElementById('ctaSubtitleColorText').value || '#718096',
+                    btnLoginLabel: document.getElementById('ctaBtnLoginLabel').value,
+                    btnLoginColor: document.getElementById('ctaBtnLoginColorText').value || '#667eea',
+                    btnRegisterLabel: document.getElementById('ctaBtnRegisterLabel').value,
+                    btnRegisterColor: document.getElementById('ctaBtnRegisterColorText').value || '#28a745'
+                },
                 titulos_paginas: {
                     indice: document.getElementById('titulo_indice').value,
                     carrito: document.getElementById('titulo_carrito').value,
@@ -766,6 +870,48 @@
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
         });
+
+        // ===== CTA HELPERS =====
+        function setCtaField(id, val, fallback) {
+            document.getElementById(id).value = val || fallback || '';
+        }
+        function setCtaColor(colorId, textId, hex) {
+            const safe = hex || '#000000';
+            document.getElementById(colorId).value = safe;
+            document.getElementById(textId).value = safe;
+        }
+        function syncColor(colorId, textId) {
+            // called from text input oninput -> syncs to color picker
+            const txt = document.getElementById(textId).value;
+            if (/^#[0-9a-fA-F]{6}$/.test(txt)) {
+                document.getElementById(colorId).value = txt;
+                updateCtaPreview();
+            }
+        }
+        // Attach change listeners to color pickers so text boxes stay in sync
+        ['ctaBgColor','ctaTitleColor','ctaSubtitleColor','ctaBtnLoginColor','ctaBtnRegisterColor'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', function() {
+                document.getElementById(id + 'Text').value = this.value;
+                updateCtaPreview();
+            });
+        });
+        // Attach input listeners to text fields for live preview too
+        ['ctaTitulo','ctaSubtitulo','ctaBtnLoginLabel','ctaBtnRegisterLabel'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', updateCtaPreview);
+        });
+        function updateCtaPreview() {
+            const get = id => document.getElementById(id)?.value || '';
+            const preview = document.getElementById('ctaPreview');
+            if (preview) preview.style.background = get('ctaBgColorText') || '#ffffff';
+            const title = document.getElementById('ctaPreviewTitle');
+            if (title) { title.textContent = get('ctaTitulo') || '¿Listo para comenzar?'; title.style.color = get('ctaTitleColorText') || '#2d3748'; }
+            const sub = document.getElementById('ctaPreviewSubtitle');
+            if (sub) { sub.textContent = get('ctaSubtitulo') || 'Únete a nuestra comunidad...'; sub.style.color = get('ctaSubtitleColorText') || '#718096'; }
+            const btnLogin = document.getElementById('ctaPreviewBtnLogin');
+            if (btnLogin) { btnLogin.textContent = get('ctaBtnLoginLabel') || 'Iniciar Sesión'; btnLogin.style.background = get('ctaBtnLoginColorText') || '#667eea'; }
+            const btnReg = document.getElementById('ctaPreviewBtnRegister');
+            if (btnReg) { btnReg.textContent = get('ctaBtnRegisterLabel') || 'Registrarse'; btnReg.style.background = get('ctaBtnRegisterColorText') || '#28a745'; }
+        }
 
         loadConfig();
     </script>

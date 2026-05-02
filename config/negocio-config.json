@@ -18,10 +18,7 @@
     "recuperar": "Recuperar Contraseña",
     "mis_pedidos": "vfmfvmfvmfv"
   },
-  "icono_pagina": {
-    "imagen": "/uploads/logos/1777586335401-760714907.webp",
-    "tipo": "image"
-  },
+  "icono_pagina": {},
   "carrito": {
     "titulo_seccion": "Mi Carrito",
     "subtitulo_seccion": "Revisa tus productos antes de finalizar la compra",
@@ -98,14 +95,14 @@
     "bannerSubtitleColor": "#ffffff"
   },
   "nombre": "Tienda Elegante",
-  "email": "jeremiasbandelli4@gmail.com",
-  "telefono": "+542346533182",
-  "direccion": "General Frías 112",
-  "descripcion": "",
+  "email": "jeremiasbandelli5@gmail.com",
+  "telefono": "+542346533189",
+  "direccion": "General Frías 113",
+  "descripcion": "s33333333333s3",
   "whatsappAdmin": "5492346533182",
   "logoHeader": {
     "type": "text",
-    "text": "Tienda",
+    "text": "Tienda ",
     "image": "/uploads/logos/1777007082451-12405996.webp",
     "size": 78
   },
@@ -125,10 +122,10 @@
     "tiktok": "https://www.facebook.com/profile.php?id=61586978735211&locale=es_LA"
   },
   "pedidosConfig": {
-    "modoOperacion": "retiro",
-    "direccionLocal": "no se",
+    "modoOperacion": "hibrido",
+    "direccionLocal": "avellaneda 219",
     "horarioLocal": "2 a 6",
-    "indicacionesLocal": "nose",
+    "indicacionesLocal": "",
     "tarifas": {
       "envio": {
         "activo": true,
@@ -146,14 +143,14 @@
       "extra": {
         "activo": true,
         "nombre": "costo adicional",
-        "tipo": "fijo",
-        "valor": 2000
+        "tipo": "porcentaje",
+        "valor": 0
       }
     }
   },
   "home": {
     "hero": {
-      "titulo": "Bienvenido a Tienda Elegante",
+      "titulo": "Bienvenido a Tienda E-commerce",
       "descripcion": "Descubre productos de alta calidad con los mejores precios",
       "boton_texto": "Explorar Productos",
       "boton_url": "/productos"
@@ -168,13 +165,19 @@
         "icono": "fas fa-shield-alt",
         "titulo": "Pago Seguro",
         "descripcion": "Múltiples métodos de pago"
-      },
-      {
-        "icono": "fas fa-gem",
-        "titulo": "Nueva Característica",
-        "descripcion": "Descripción de la característica"
       }
     ],
+    "cta": {
+      "titulo": "¿Listo para comenzar?",
+      "subtitulo": "Únete  y disfruta de los mejores productos",
+      "bgColor": "#ffffff",
+      "titleColor": "#2d3748",
+      "subtitleColor": "#718096",
+      "btnLoginLabel": "Iniciar Sesión",
+      "btnLoginColor": "#667eea",
+      "btnRegisterLabel": "Registrarse",
+      "btnRegisterColor": "#000000"
+    },
     "titulos_paginas": {
       "indice": "Tienda",
       "carrito": "vfffffffffffnfvnnfv",

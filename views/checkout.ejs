@@ -4,10 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Finalizar Compra</title>
+    <% if (negocio && negocio.icono_pagina && negocio.icono_pagina.imagen) { %>
+        <link rel="icon" href="<%= negocio.icono_pagina.imagen %>" type="image/x-icon">
+        <link rel="apple-touch-icon" href="<%= negocio.icono_pagina.imagen %>">
+    <% } %>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
+    <!-- ===== COLORES DINÁMICOS ADMIN ===== -->
+    <% 
+        const _c = (negocio && negocio.colores) ? negocio.colores : {};
+        const _p1             = _c.primary          || '#667eea';
+        const _p2             = _c.secondary        || '#764ba2';
+        const _bodyBg         = _c.bodyBg           || '#f5f7fb';
+        const _textColor      = _c.textColor        || '#2d3748';
+        const _navbarBg       = _c.navbarBg         || '#ffffff';
+        const _navGrad        = (_c.navbarUsesGradient === 'true');
+        const _logoColor      = _c.logoTextColor    || '#667eea';
+        const _navLinkColor   = _c.navLinkColor     || '#2d3748';
+        const _navLinkHover   = _c.navLinkHover     || '#ffffff';
+        const _btnBg1         = _c.btnBg1           || _p1;
+        const _btnBg2         = _c.btnBg2           || _p2;
+        const _btnBg3         = _c.btnBg3           || _p2;
+        const _btnMode        = _c.btnColorMode     || '2';
+        const _btnTextColor   = _c.btnTextColor     || '#ffffff';
+        const _iconColor      = _c.iconColor        || _p1;
+        const _iconColor2     = _c.iconColor2       || _p2;
+        const _navBgFinal     = _navGrad
+            ? `linear-gradient(135deg,${_p1} 0%,${_p2} 100%)`
+            : _navbarBg;
+        const _navLinkFinal   = _navGrad ? 'rgba(255,255,255,0.92)' : _navLinkColor;
+        const buildDynColor = (mode, c1, c2, c3) => {
+            if (mode === '1') return c1;
+            if (mode === '3') return `linear-gradient(135deg, ${c1} 0%, ${c2} 50%, ${c3} 100%)`;
+            return `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+        };
+        const _btnBgFinal     = buildDynColor(_btnMode, _btnBg1, _btnBg2, _btnBg3);
+    %>
+    <style>
+        :root {
+            --dyn-p1:            <%= _p1 %>;
+            --dyn-p2:            <%= _p2 %>;
+            --dyn-body-bg:       <%= _bodyBg %>;
+            --dyn-text:          <%= _textColor %>;
+            --dyn-navbar-bg:     <%= _navBgFinal %>;
+            --dyn-nav-link:      <%= _navLinkFinal %>;
+            --dyn-nav-hover-bg:  linear-gradient(135deg, <%= _p1 %> 0%, <%= _p2 %> 100%);
+            --dyn-nav-hover-text:<%= _navLinkHover %>;
+            --dyn-btn1:          <%= _btnBg1 %>;
+            --dyn-btn2:          <%= _btnBg2 %>;
+            --dyn-btn-text:      <%= _btnTextColor %>;
+            --dyn-icon1:         <%= _iconColor %>;
+            --dyn-icon2:         <%= _iconColor2 %>;
+            --dyn-gradient:      linear-gradient(135deg, var(--dyn-p1) 0%, var(--dyn-p2) 100%);
+            --dyn-btn-gradient:  <%= _btnBgFinal %>;
+            --dyn-icon-gradient: linear-gradient(135deg, var(--dyn-icon1) 0%, var(--dyn-icon2) 100%);
+            --primary:   var(--dyn-p1);
+            --secondary: var(--dyn-p2);
+            --gradient:  var(--dyn-gradient);
+        }
+
+        body { background: var(--dyn-body-bg) !important; color: var(--dyn-text) !important; }
+        .navbar { background: var(--dyn-navbar-bg) !important; }
+
+        <% if (_navGrad) { %>
+        .navbar-brand,
+        .navbar-brand span,
+        .logo-container i {
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+            color: #ffffff !important;
+        }
+        <% } else if (_c.logoTextColor) { %>
+        .navbar-brand,
+        .navbar-brand span,
+        .logo-container i {
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+            color: <%= _logoColor %> !important;
+        }
+        <% } %>
+
+        <% if (_c.navLinkColor || _navGrad) { %>
+        .navbar-nav .nav-link {
+            color: var(--dyn-nav-link) !important;
+        }
+        <% } %>
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus,
+        .navbar-nav .nav-link.active {
+            background: var(--dyn-nav-hover-bg) !important;
+            color: var(--dyn-nav-hover-text) !important;
+        }
+
+        .navbar-toggler { background: var(--dyn-gradient) !important; border: none !important; }
+        
+        .btn-primary {
+            background: var(--dyn-btn-gradient) !important;
+            border-color: var(--dyn-btn1) !important;
+            color: var(--dyn-btn-text) !important;
+        }
+        .btn-primary:hover { opacity: 0.9; filter: brightness(1.05); color: var(--dyn-btn-text) !important; }
+
+        .btn-confirm {
+            background: var(--dyn-btn-gradient) !important;
+            border: none !important;
+            color: var(--dyn-btn-text) !important;
+        }
+
+        .feature-icon-modern,
+        .stats-icon-client,
+        .icon-circle { background: var(--dyn-icon-gradient) !important; }
+        
+        .entrega-opt.active {
+            border-color: var(--dyn-p1) !important;
+            background: linear-gradient(135deg, rgba(var(--dyn-p1),0.08), rgba(var(--dyn-p2),0.08)) !important;
+        }
+        .entrega-opt i { color: var(--dyn-p1) !important; }
+        .badge-modo { border-color: var(--dyn-p1) !important; color: var(--dyn-p1) !important; }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--dyn-p1) !important;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.12) !important;
+        }
+    </style>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .checkout-card {
@@ -64,10 +187,6 @@
             background: white;
         }
         .entrega-opt:hover { border-color: #667eea; }
-        .entrega-opt.active {
-            border-color: #667eea;
-            background: linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08));
-        }
         .entrega-opt i { font-size: 1.5rem; display: block; margin-bottom: 6px; color: #667eea; }
         .entrega-opt span { font-weight: 600; font-size: 0.9rem; color: #1e293b; }
         .entrega-opt small { display: block; color: #64748b; font-size: 0.75rem; margin-top: 2px; }
@@ -118,64 +237,8 @@
     </style>
 </head>
 <body>
-<%
-    /*
-     * CAUSA RAIZ DEL BUG ANTERIOR:
-     * El EJS original re-leía el archivo con process.cwd() que puede diferir
-     * de __dirname del controller → archivo no encontrado → pedidosCfg = {} →
-     * todos los activo=undefined → nada se muestra.
-     *
-     * SOLUCIÓN: usar directamente `pedidosConfig` que el controller ya pasa.
-     */
-    const cfg       = (typeof pedidosConfig !== 'undefined' && pedidosConfig) ? pedidosConfig : {};
-    const modoOp    = cfg.modoOperacion || 'hibrido';
-    const tarifas   = cfg.tarifas || {};
-    const envioConf = tarifas.envio     || {};
-    const impConf   = tarifas.impuesto  || {};
-    const extraConf = tarifas.extra     || {};
 
-    const modoInicial = (modoOp === 'retiro') ? 'retiro' : 'delivery';
-    const sub         = parseFloat(subtotal) || 0;
-
-    // Flags booleanos estrictos
-    const envioActivo = envioConf.activo === true;
-    const ivaActivo   = impConf.activo   === true;
-    const ivaIncluido = impConf.incluido  === true;
-    const extraActivo = extraConf.activo  === true;
-
-    // Envío inicial
-    let envioInicial  = 0;
-    let envioEsGratis = false;
-    if (envioActivo && modoInicial !== 'retiro') {
-        const tipoEnvio = envioConf.tipo || 'fijo';
-        const valEnvio  = parseFloat(envioConf.valor) || 0;
-        if (tipoEnvio === 'gratis_desde') {
-            const limite = parseFloat(envioConf.gratisDesde) || 0;
-            if (sub >= limite) { envioEsGratis = true; }
-            else               { envioInicial = valEnvio; }
-        } else if (tipoEnvio === 'porcentaje') {
-            envioInicial = sub * valEnvio / 100;
-        } else {
-            envioInicial = valEnvio;
-        }
-    }
-
-    // IVA inicial
-    const ivaInicial = (ivaActivo && !ivaIncluido)
-        ? sub * (parseFloat(impConf.porcentaje) || 0) / 100
-        : 0;
-
-    // Cargo extra inicial
-    let extraInicial = 0;
-    if (extraActivo) {
-        const valExtra = parseFloat(extraConf.valor) || 0;
-        extraInicial   = (extraConf.tipo === 'porcentaje') ? sub * valExtra / 100 : valExtra;
-    }
-
-    const totalInicial = sub + envioInicial + ivaInicial + extraInicial;
-%>
-
-    <!-- Navbar -->
+    <!-- Navbar - MISMO QUE INDEX.EJS -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
@@ -183,9 +246,14 @@
                     <% if (negocio.logoHeader && negocio.logoHeader.type === 'image' && negocio.logoHeader.image) { %>
                         <img src="<%= negocio.logoHeader.image %>" alt="<%= negocio.nombre %>"
                              style="width:<%= negocio.logoHeader?.size||150 %>px;max-width:100%;object-fit:contain;">
+                    <% } else if (negocio.logoHeader && negocio.logoHeader.type === 'image' && negocio.logoHeader.image) { %>
+                        <img src="<%= negocio.logoHeader.image %>" alt="<%= negocio.nombre %>"
+                             style="width:<%= negocio.logoHeader?.size||150 %>px;max-width:100%;object-fit:contain;">
+                    <% } else if (negocio.logoHeader && negocio.logoHeader.image && negocio.logoHeader.type !== 'text') { %>
+                        <img src="<%= negocio.logoHeader.image %>" alt="<%= negocio.nombre %>" style="width: <%= negocio.logoHeader?.size || 150 %>px; max-width: 100%; object-fit: contain;">
                     <% } else { %>
                         <i class="fas fa-store"></i>
-                        <span><%= negocio.logoHeader && negocio.logoHeader.text ? negocio.logoHeader.text : negocio.nombre %></span>
+                        <span><%= negocio.logoHeader && negocio.logoHeader.text ? negocio.logoHeader.text : (negocio.nombre || 'Tienda Elegante') %></span>
                     <% } %>
                 </div>
             </a>
@@ -199,6 +267,9 @@
                     <% if (user) { %>
                         <li class="nav-item"><a class="nav-link" href="/mis-pedidos"><i class="fas fa-truck"></i> Mis Pedidos</a></li>
                         <li class="nav-item"><a class="nav-link" href="/perfil"><i class="fas fa-user-circle"></i> <%= user.nombre %></a></li>
+                        <% if (user.rol === 'admin') { %>
+                            <li class="nav-item"><a class="nav-link" href="/admin"><i class="fas fa-chart-line"></i> Admin</a></li>
+                        <% } %>
                         <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
                     <% } else { %>
                         <li class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-key"></i> Login</a></li>
@@ -209,6 +280,7 @@
         </div>
     </nav>
 
+    <!-- CONTINÚA EL RESTO DEL CONTENIDO DEL CHECKOUT ORIGINAL -->
     <div class="container">
         <div class="checkout-card">
             <div class="text-center mb-4">
@@ -225,12 +297,20 @@
             <% } %>
 
             <div class="row g-4">
-                <!-- ═══ FORMULARIO ═══ -->
                 <div class="col-lg-7">
                     <form action="/checkout" method="POST" id="checkoutForm" enctype="multipart/form-data">
-                        <input type="hidden" name="modo_entrega" id="modoEntregaInput" value="<%= modoInicial %>">
+                        <%
+                            const cfg = (typeof pedidosConfig !== 'undefined' && pedidosConfig) ? pedidosConfig : {};
+                            const modoOp = cfg.modoOperacion || 'hibrido';
+                            const tarifas = cfg.tarifas || {};
+                            const envioConf = tarifas.envio || {};
+                            const impConf = tarifas.impuesto || {};
+                            const extraConf = tarifas.extra || {};
+                            const modoInicialDisplay = (modoOp === 'retiro') ? 'retiro' : 'delivery';
+                            const sub = parseFloat(subtotal) || 0;
+                        %>
+                        <input type="hidden" name="modo_entrega" id="modoEntregaInput" value="<%= modoInicialDisplay %>">
 
-                        <!-- MODO DE ENTREGA -->
                         <% if (modoOp === 'hibrido') { %>
                         <div class="form-section">
                             <h5><i class="fas fa-route"></i> ¿Cómo recibís tu pedido?</h5>
@@ -261,7 +341,6 @@
                         </div>
                         <% } %>
 
-                        <!-- DIRECCIÓN -->
                         <div class="form-section" id="seccionDireccion"
                              style="<%= modoOp === 'retiro' ? 'display:none;' : '' %>">
                             <h5><i class="fas fa-map-marker-alt"></i> Dirección de entrega</h5>
@@ -270,7 +349,6 @@
                                 <%= modoOp !== 'retiro' ? 'required' : '' %>><%= user.direccion || '' %></textarea>
                         </div>
 
-                        <!-- INFO RETIRO -->
                         <% if (modoOp !== 'delivery') { %>
                         <div class="info-retiro" id="infoRetiro"
                              style="<%= modoOp === 'retiro' ? '' : 'display:none;' %>margin-bottom:20px;">
@@ -284,21 +362,17 @@
                         </div>
                         <% } %>
 
-                        <!-- PAGO -->
                         <div class="form-section">
                             <h5><i class="fas fa-credit-card"></i> Cuándo y cómo pagás</h5>
                             <input type="hidden" name="momento_pago" id="momentoPagoInput" value="">
                             <input type="hidden" name="forma_pago" id="formaPagoInput" value="">
 
-                            <!-- Opciones de momento de pago (se renderizan según modo) -->
                             <div class="entrega-opts mb-3" id="opcionesPago">
-                                <!-- Opción: Pagar ahora -->
                                 <div class="entrega-opt" id="opt-pagar-ahora" onclick="selectPago('ahora')">
                                     <i class="fas fa-bolt"></i>
                                     <span id="labelPagarAhora">Pagar ahora</span>
                                     <small>Transferencia bancaria</small>
                                 </div>
-                                <!-- Opción: Pagar después -->
                                 <div class="entrega-opt" id="opt-pagar-despues" onclick="selectPago('despues')">
                                     <i class="fas fa-clock"></i>
                                     <span id="labelPagarDespues">Pagar al recibir</span>
@@ -306,7 +380,6 @@
                                 </div>
                             </div>
 
-                            <!-- Bloque comprobante (visible solo si paga ahora) -->
                             <div id="bloqueComprobante" style="display:none;">
                                 <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:16px;margin-bottom:12px;">
                                     <p class="mb-2" style="font-size:0.9rem;color:#166534;font-weight:600;">
@@ -330,17 +403,16 @@
                                 </div>
                             </div>
 
-                            <!-- Mensaje pago al recibir -->
-                            <div id="bloquePagarDespues" style="display:none;
-background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;margin-top:8px;">
-                                <p class="mb-0" style="font-size:0.88rem;color:#854d0e;">
-                                    <i class="fas fa-handshake me-1"></i>
-                                    <span id="msgPagarDespues"></span>
-                                </p>
+                            <div id="bloquePagarDespues" style="display:none;">
+                                <div style="background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;margin-top:8px;">
+                                    <p class="mb-0" style="font-size:0.88rem;color:#854d0e;">
+                                        <i class="fas fa-handshake me-1"></i>
+                                        <span id="msgPagarDespues"></span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- NOTAS -->
                         <div class="form-section">
                             <h5><i class="fas fa-sticky-note"></i> Notas adicionales</h5>
                             <textarea name="notas" class="form-control" rows="2"
@@ -353,7 +425,6 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
                     </form>
                 </div>
 
-                <!-- ═══ RESUMEN ═══ -->
                 <div class="col-lg-5">
                     <div class="order-summary">
                         <h4><i class="fas fa-receipt me-2"></i>Resumen</h4>
@@ -372,26 +443,22 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
                             <span>$<%= sub.toFixed(2) %></span>
                         </div>
 
-                        <!-- ENVÍO: solo si activo=true en config -->
-                        <% if (envioActivo) { %>
+                        <% if (envioConf.activo === true) { %>
                         <div class="summary-row tarifa-row" id="rowEnvio"
-                             style="<%= modoInicial === 'retiro' ? 'display:none;' : '' %>">
+                             style="<%= modoInicialDisplay === 'retiro' ? 'display:none;' : '' %>">
                             <span><%= envioConf.label || 'Envío' %></span>
-                            <span id="montoEnvio"><% if (envioEsGratis) { %>¡Gratis! 🎉<% } else { %>$<%= envioInicial.toFixed(2) %><% } %></span>
+                            <span id="montoEnvio"></span>
                         </div>
                         <% if (envioConf.tipo === 'gratis_desde' && parseFloat(envioConf.gratisDesde) > 0) { %>
-                        <div class="nota-gratis" id="notaEnvio">
-                            <% if (!envioEsGratis) { %>Envío gratis desde $<%= parseFloat(envioConf.gratisDesde).toFixed(0) %><% } %>
-                        </div>
+                        <div class="nota-gratis" id="notaEnvio"></div>
                         <% } %>
                         <% } %>
 
-                        <!-- IVA: solo si activo=true en config -->
-                        <% if (ivaActivo) { %>
-                            <% if (!ivaIncluido) { %>
+                        <% if (impConf.activo === true) { %>
+                            <% if (!impConf.incluido) { %>
                             <div class="summary-row tarifa-row" id="rowImpuesto">
                                 <span><%= impConf.label || 'IVA' %> (<%= parseFloat(impConf.porcentaje)||0 %>%)</span>
-                                <span id="montoImpuesto">$<%= ivaInicial.toFixed(2) %></span>
+                                <span id="montoImpuesto">$0.00</span>
                             </div>
                             <% } else { %>
                             <div class="summary-row incluido-row">
@@ -401,11 +468,10 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
                             <% } %>
                         <% } %>
 
-                        <!-- CARGO EXTRA: solo si activo=true en config -->
-                        <% if (extraActivo) { %>
+                        <% if (extraConf.activo === true) { %>
                         <div class="summary-row tarifa-row" id="rowExtra">
                             <span><%= extraConf.nombre || 'Cargo extra' %></span>
-                            <span id="montoExtra">$<%= extraInicial.toFixed(2) %></span>
+                            <span id="montoExtra">$0.00</span>
                         </div>
                         <% } %>
 
@@ -413,7 +479,7 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
 
                         <div class="summary-total">
                             <span>Total</span>
-                            <strong id="totalFinal">$<%= totalInicial.toFixed(2) %></strong>
+                            <strong id="totalFinal">$0.00</strong>
                         </div>
                     </div>
                 </div>
@@ -425,11 +491,11 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const subtotal  = <%= sub %>;
+        const subtotal  = parseFloat(<%= sub %>) || 0;
         const modoOp    = '<%= modoOp %>';
-        const envioConf = <%- JSON.stringify(envioConf) %>;
-        const impConf   = <%- JSON.stringify(impConf) %>;
-        const extraConf = <%- JSON.stringify(extraConf) %>;
+        const envioConf = <%- JSON.stringify(envioConf || {}) %>;
+        const impConf   = <%- JSON.stringify(impConf || {}) %>;
+        const extraConf = <%- JSON.stringify(extraConf || {}) %>;
 
         function calcEnvio(modo) {
             if (!envioConf.activo || modo === 'retiro') return { monto: 0, gratis: false };
@@ -460,7 +526,6 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
             const exMonto  = calcExtra();
             const total    = subtotal + envio.monto + impMonto + exMonto;
 
-            // Envío
             const rowEnvio   = document.getElementById('rowEnvio');
             const montoEnvio = document.getElementById('montoEnvio');
             const notaEnvio  = document.getElementById('notaEnvio');
@@ -475,15 +540,12 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
                 }
             }
 
-            // IVA
             const montoImp = document.getElementById('montoImpuesto');
             if (montoImp) montoImp.textContent = '$' + impMonto.toFixed(2);
 
-            // Extra
             const montoEx = document.getElementById('montoExtra');
             if (montoEx) montoEx.textContent = '$' + exMonto.toFixed(2);
 
-            // Total
             const totalEl = document.getElementById('totalFinal');
             if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
         }
@@ -515,14 +577,14 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
                 }
             }
             updateSummary(modo);
+            actualizarLabelsPago(modo);
+            if (typeof modoPagoActual !== 'undefined' && modoPagoActual) selectPago(modoPagoActual);
         }
 
-        // ── Lógica de pago — variable global para evitar TDZ ────
         var modoPagoActual = null;
 
         function initPago(modoEntrega) {
             actualizarLabelsPago(modoEntrega);
-            // Seleccionar por defecto 'ahora'
             selectPago('ahora');
         }
 
@@ -569,14 +631,6 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
             }
         }
 
-        // Actualizar labels de pago cuando cambia el modo de entrega
-        var _origSelectEntrega = selectEntrega;
-        selectEntrega = function(modo) {
-            _origSelectEntrega(modo);
-            actualizarLabelsPago(modo);
-            if (modoPagoActual) selectPago(modoPagoActual);
-        };
-
         function previewComprobante(input) {
             const wrap = document.getElementById('previewComprobanteWrap');
             const img  = document.getElementById('previewComprobanteImg');
@@ -603,7 +657,6 @@ background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:14px;ma
             return true;
         }
 
-        // Init — corre después de que todas las funciones están definidas
         (function() {
             const modoInicial = (modoOp === 'retiro') ? 'retiro' : 'delivery';
             if (modoOp === 'retiro') {

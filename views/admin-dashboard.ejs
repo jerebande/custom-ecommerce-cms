@@ -341,6 +341,9 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
         .stats-card::before {
@@ -369,14 +372,18 @@
             margin-bottom: 16px;
             background: var(--gradient);
             color: var(--white);
+            flex-shrink: 0;
         }
 
         .stats-number {
-            font-size: 2rem;
+            font-size: clamp(1.25rem, 2.2vw, 2rem);
             font-weight: 800;
             margin-bottom: 4px;
             color: var(--dark);
-            word-break: break-word;
+            line-height: 1.15;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .stats-label {
@@ -1184,7 +1191,12 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="stats-card">
                             <div class="stats-icon"><i class="fas fa-dollar-sign"></i></div>
-                            <div class="stats-number" id="ventasTotales"><%= formatNumber(pedidos ? pedidos.reduce((s,p) => s + (parseFloat(p.total)||0), 0) : 0) %></div>
+                            <div class="stats-number" id="ventasTotales"><%
+                                const _vt = pedidos ? pedidos.reduce((s,p) => s + (parseFloat(p.total)||0), 0) : 0;
+                                if (_vt >= 1000000) { %><%= '$' + (_vt/1000000).toFixed(1).replace(/\.0$/,'') + 'M' %><%
+                                } else if (_vt >= 10000) { %><%= '$' + Math.round(_vt).toLocaleString('es-AR') %><%
+                                } else { %><%= formatNumber(_vt) %><% } %>
+                            </div>
                             <div class="stats-label">Ventas Totales</div>
                         </div>
                     </div>
@@ -2786,16 +2798,34 @@
     <script>
         // Función de formateo para JavaScript (cliente)
         function formatNumberClient(num) {
-            if (num === undefined || num === null || isNaN(num)) return '$0.00';
+            if (num === undefined || num === null || isNaN(num)) return '$0';
             const number = parseFloat(num);
             if (number >= 1000000) {
                 return '$' + (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
             }
+            if (number >= 10000) {
+                // Show without decimals to keep it compact
+                return '$' + Math.round(number).toLocaleString('es-AR');
+            }
             return '$' + number.toLocaleString('es-AR', {
-                minimumFractionDigits: 2,
+                minimumFractionDigits: 0,
                 maximumFractionDigits: 2
             });
         }
+
+        // Auto-shrink stats numbers that overflow their container
+        function fitStatsNumbers() {
+            document.querySelectorAll('.stats-number').forEach(el => {
+                el.style.fontSize = '';
+                let size = parseFloat(getComputedStyle(el).fontSize);
+                while (el.scrollWidth > el.offsetWidth && size > 12) {
+                    size -= 1;
+                    el.style.fontSize = size + 'px';
+                }
+            });
+        }
+        window.addEventListener('load', fitStatsNumbers);
+        window.addEventListener('resize', fitStatsNumbers);
 
         let productoAEliminar = null;
         let productosData = <%- JSON.stringify(productos || []) %>;
